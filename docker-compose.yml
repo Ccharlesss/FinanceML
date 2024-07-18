@@ -1,0 +1,51 @@
+services:
+  ### Define the container where the DB is located ###
+  db:
+    image: postgres:alpine
+    container_name: db-backend
+    environment:
+      # POSTGRES_USER is set to postgres, which means the username will be postgres.
+      # Username used to connect to the PostgreSQL database.
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - back-end
+    restart: unless-stopped
+    env_file:
+      - .env # Add this line
+
+  ### Define the container where the web app is located ###
+  app:
+    # Builds the Docker image using the Dockerfile in the current directory and names the container webapp.
+    build: .
+    container_name: webapp-backend
+    # command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload --reload-include *
+    command: /bin/bash -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 80"
+    ports:
+      # Map port 8080 on docker host to port 80 of container where webapp is.
+      - "8080:80"
+    volumes:
+      # If something in folder changes, sync changes automatically to /app directory in the container.
+      # Uvicorn cmd will detect changes and restart server => restart container
+      # Enable live updates and avoid the need to rebuild the container for each code change.
+      # this volume is for code synchronization, not for persisting data => No need to define a volume name
+      - .:/app
+    environment:
+      # Env veriable used to store the connection string for PostgreSQL db
+      # ${POSTGRES_PASSWORD} is an env variable that Docker will replace with the actual password when the container starts.
+      DB_URL: ${DB_URL}
+    networks:
+      # Connects the container to the back-end network allowing communications w/ db container:
+      - back-end
+    restart: unless-stopped
+    env_file:
+      - .env
+# Define the volume called postgres-data used to store data from db:
+volumes:
+  postgres-data:
+# # Define network called back-end used for connecting back end containers:
+networks:
+  back-end:
