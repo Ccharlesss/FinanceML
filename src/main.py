@@ -6,6 +6,7 @@ from src.Configuration.database import Base, engine
 from src.Routes.UserRoutes import user_router
 from src.Routes.AuthRoutes import auth_router, notyet_login_router
 from src.Routes.RoleRoutes import role_router
+from src.Routes.DataRoutes import data_router
 
 # Create FastAPI application
 app = FastAPI()
@@ -15,6 +16,7 @@ app.include_router(user_router)
 app.include_router(notyet_login_router)
 app.include_router(auth_router)
 app.include_router(role_router)
+app.include_router(data_router)
 
 # Create all database tables
 Base.metadata.create_all(bind=engine)

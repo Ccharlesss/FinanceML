@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 import logging
+from venv import logger
 from fastapi import BackgroundTasks, HTTPException
 from requests import Session
 
@@ -113,10 +114,19 @@ async def update_user_role(email: str, new_role: str, session: Session):
     user = session.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(status_code=404, detail=f"User with email {email} not found")
-
+    
+    current_role = user.role
+    logger.info(f"Updating role for user {user.email} from {current_role} to {new_role}")
     user.role = new_role
-    session.commit()
 
+    try:
+        session.commit()
+        session.refresh(user)  # Refresh the user instance to reflect the latest state from the database
+        logger.info(f"Role updated successfully for user {user.email} to {user.role}")
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Failed to update role for user {user.email}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to update user role: {str(e)}")
 
 
 ### ========================================================================================================

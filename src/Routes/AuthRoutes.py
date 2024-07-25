@@ -58,16 +58,12 @@ async def logout(current_user: User = Depends(get_current_user), session: Sessio
     return {"message": "Logout successful"}
 
 
-
-
-
-
+### Refresh User Token ###
 # @auth_router.post("/refresh", status_code=status.HTTP_200_OK, response_model=LoginResponse)
-# async def refresh_token(refresh_token: str = Header(...), session: Session = Depends(get_db)):
+# async def refresh_token(refresh_token: str = Header(None), session: Session = Depends(get_db)):
 #     return await TokenController.get_refresh_token(refresh_token, session)
 
 
-### Refresh User Token ###
 @auth_router.post("/refresh", status_code=status.HTTP_200_OK, response_model=LoginResponse)
-async def refresh_token(refresh_token: str = Header(None), session: Session = Depends(get_db)):
+async def refresh_token(refresh_token = Header(None), session: Session = Depends(get_db)):
     return await TokenController.get_refresh_token(refresh_token, session)

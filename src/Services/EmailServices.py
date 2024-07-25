@@ -4,7 +4,7 @@ from src.Models.UserModel import User
 from src.Configuration.email import send_email
 from src.Context.EmailContext import  USER_VERIFY_ACCOUNT
 from src.Configuration.security import hash_password
-# from src.Configuration.email import render_email_template
+
 
 
 

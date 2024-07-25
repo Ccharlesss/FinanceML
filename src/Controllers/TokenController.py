@@ -41,7 +41,6 @@ async def _generate_tokens(user, session):
         "a": access_key,
         "r": str_encode(str(user_token.id)),
         "n": str_encode(f"{user.username}"),
-        # "roles": [user.role]  # Include user's role directly
         "role": str_encode(user.role)
     }
 
@@ -52,9 +51,8 @@ async def _generate_tokens(user, session):
     rt_payload = {"sub": str_encode(str(user.id)),
                   "t": refresh_key,
                   "a": access_key,
-                  "role": str_encode(user.role)
     }
-
+    # 8) Generate the refresh token:
     refresh_token = generate_token(rt_payload, settings.SECRET_KEY, settings.JWT_ALGORITHM, rt_expires)
 
     return {
@@ -62,6 +60,7 @@ async def _generate_tokens(user, session):
         "refresh_token": refresh_token,
         "expires_in": at_expires.seconds
     }
+
 
 
 
@@ -84,8 +83,7 @@ async def get_refresh_token(refresh_token, session):
         Token.refresh_key == refresh_key,
         Token.access_key == access_key,
         Token.user_id == user_id,
-        Token.expires_at > datetime.now(timezone.utc)
-    ).first()
+        Token.expires_at > datetime.now(timezone.utc)).first()
 
     if not user_token:
         raise HTTPException(status_code=400, detail="Invalid Request.")
