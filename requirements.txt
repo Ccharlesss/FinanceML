@@ -21,3 +21,7 @@ httpx==0.27.0
 databases==0.9.0
 yfinance==0.2.41
 aiofiles==24.1.0
+scikit-learn==1.5.1
+ta==0.11.0
+plotly==5.23.0
+matplotlib==3.9.1

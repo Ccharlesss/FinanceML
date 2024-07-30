@@ -96,7 +96,6 @@ async def activate_user_account(data, session: Session, background_tasks: Backgr
 
 ### ========================================================================================================
 ###                                           MANAGE USR ROLES
-
 ### Assign a role to a user ###
 async def assign_role_to_user(email: str, role_name: str, session: Session):
     """Assigns a role to a user."""
@@ -131,7 +130,6 @@ async def update_user_role(email: str, new_role: str, session: Session):
 
 ### ========================================================================================================
 ###                                           LOGIN / LOGOUT FUNC
-
 ### Purpose: Logout of the account ###
 async def logout_user(current_user: User, session: Session):
     # Invalidate the refresh token associated with the current user
@@ -175,9 +173,9 @@ async def get_login_token(data, session):
     )
 
 
+
 ### ========================================================================================================
 ###                                            CHANGE PSW FUNC
-
 ### Purpose: Reset user's password: ###
 async def reset_password(data, session):
    # 1) Fetch the user from the database based on its email address:
@@ -203,9 +201,11 @@ async def fetch_user_detail(pk, session):
     raise HTTPException(status_code=400, detail="User does not exists.")
 
 
+
+
+
 ### ========================================================================================================
 ###                                            LIST ALL USERS
-
 async def list_all_users(session: Session):
     try:
         # Query the database to retrieve all users
@@ -214,3 +214,53 @@ async def list_all_users(session: Session):
     except Exception as e:
         logging.error(f"An error occurred while listing users: {str(e)}")
         raise HTTPException(status_code=500, detail="An error occurred while listing users.")
+
+
+
+
+### ========================================================================================================
+###                                            Deactivate User Account
+async def freeze_user_account(data, session: Session):
+    # 1) Try to retrieve the user from the database:
+    user = await load_user(data.email, session)
+    if not user:
+        raise HTTPException(status_code=400, detail="No user with the following email {data.email} has been found.")
+    # 2) Verify if the username retrieved matches the one of the user:
+    if user.username != data.username:
+        raise HTTPException(status_code=400, detail="The Username {data.username} doesn't match the one retrieved from the DB.")
+    # 3) Modify the active status of user to False:
+    user.is_active = False
+    # 4) Attempt to commit this change to the DB:
+    try:
+        session.commit()
+        session.refresh(user)
+        logger.info("User Account has been froozen.")
+        return user
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Failed to freeze user's account: {e}")
+        raise HTTPException(status_code=500, detail="Failed to freeze user's account: {e}")
+    
+
+### ========================================================================================================
+###                                            Re-activate User Account
+async def unfreeze_user_account(data, session: Session):
+    # 1) Try to retrieve the user from the database:
+    user = await load_user(data.email, session)
+    if not user:
+        raise HTTPException(status_code=400, detail="No user with the following email {data.email} has been found.")
+    # 2( Verify if the username retrieved matches the one of the user:
+    if user.username != data.username:
+        raise HTTPException(status_code=400, detail="The Username {data.username} doesn't match the one retrieved from the DB.")
+    # 3) Modify the active status of the user to True:
+    user.is_active = True
+    # 4) Attempt to commit this change to the DB:
+    try:
+        session.commit()
+        session.refresh(user)
+        logger.info("User's account has been re-activated.")
+        return user
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Failed to re-activate user's account: {e}")
+        raise HTTPException(status_code=500, detail="Failed to re-activate user's account: {e}")
