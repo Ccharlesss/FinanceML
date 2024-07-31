@@ -1,5 +1,5 @@
 services:
-  ### Define the container where the DB is located ###
+  ### Define the container where the DB is located:
   db:
     image: postgres:alpine
     container_name: db-backend
@@ -17,7 +17,7 @@ services:
     env_file:
       - .env # Add this line
 
-  ### Define the container where the web app is located ###
+  ### Define the container where the web app is located:
   app:
     # Builds the Docker image using the Dockerfile in the current directory and names the container webapp.
     build: .
@@ -43,6 +43,28 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    depends_on:
+      - db
+
+  ### Define the container where the front end part of the web app is located:
+  frontend:
+    # Builds the Docker image using the dockerfile for the frontend located at ./frontend
+    build: ./frontend
+    container_name: webapp-frontend
+    command: npm start
+    # Specifies that host machine listens (docker hub) listens on port 3000:  3000 is the one frontent docker container exposes:
+    ports:
+      - "3000:3000"
+    # Enables Real-time syncing through bind mount.
+    # When a file is modified in ./frontend, change is dirrectly reflected in working directory of docker frontend container
+    volumes:
+      - ./frontend:/app
+    networks:
+      - back-end
+    restart: unless-stopped
+    depends_on:
+      - app
+
 # Define the volume called postgres-data used to store data from db:
 volumes:
   postgres-data:
