@@ -30,9 +30,16 @@ const SignIn = () => {
     try {
       const postData = { email: formData.email, password: formData.password };
       const response = await axios.post(API_BASE_URL + "/auth/login", postData);
-      setDataSubmitted(true);
+
+      if (response.status === 200) {
+        console.log("Login successful:", response.data);
+        setDataSubmitted(true);
+      }
     } catch (error) {
-      console.log("problem", e);
+      console.log(
+        "Error during login:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 

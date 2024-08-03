@@ -1,5 +1,6 @@
 # src/main.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 # Import from Configuration:
 from src.Configuration.database import Base, engine
 # Import Routes:
@@ -12,6 +13,21 @@ from src.Routes.RandomForestRoute import random_forest_router
 
 # Create FastAPI application
 app = FastAPI()
+
+
+
+# Define the origins that should be allowed to make cross-origin requests
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include routers from UserRoute
 app.include_router(user_router)

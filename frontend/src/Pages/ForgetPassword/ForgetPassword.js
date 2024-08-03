@@ -42,9 +42,16 @@ const ForgetPassword = () => {
         API_BASE_URL,
         putData
       );
-      setDataSubmitted(true);
+
+      if (response.status === 200) {
+        console.log("Password was successfully changed", response.data);
+        setDataSubmitted(true);
+      }
     } catch (error) {
-      console.log("An error occured in forget password process:", e);
+      console.log(
+        "An error occured in forget password process:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 

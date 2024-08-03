@@ -39,9 +39,16 @@ const SignUp = () => {
         API_BASE_URL + "users/signup",
         postData
       );
-      setDataSubmitted(true);
+
+      if (response.status === 200) {
+        console.log("Account was successfully created:", response.data);
+        setDataSubmitted(true);
+      }
     } catch (error) {
-      console.log("problem", error);
+      console.log(
+        "An error occurred in the account creation",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
