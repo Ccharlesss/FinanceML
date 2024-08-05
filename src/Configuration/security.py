@@ -191,5 +191,5 @@ async def load_user(email: str, db: Session) -> User:
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     user = await get_token_user(token=token, db=db)
     if user:
-        return user
+      return user
     raise HTTPException(status_code=401, detail="Not authorised.")

@@ -24,5 +24,5 @@ async def get_kmean_plot(session: Session = Depends(get_db), current_user: User 
     raise HTTPException(status_code=401, detail="Not authorized.")
   if not current_user.role == "Admin":
     raise HTTPException(status_code=401, detail="Not an admin thus not authorized.")
-  await KMeanService.orchestrate_kmean_and_plot()
-  return JSONResponse({"message": "KMean and the plot was performed successfully."})
+  return await KMeanService.orchestrate_kmean_and_plot()
+  # return JSONResponse({"message": "KMean and the plot was performed successfully."})

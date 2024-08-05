@@ -9,6 +9,7 @@ from src.Routes.AuthRoutes import auth_router
 from src.Routes.RoleRoutes import role_router
 from src.Routes.DataRoutes import data_router
 from src.Routes.RandomForestRoute import random_forest_router
+from src.Routes.KMeanRoute import kmean_router;
 
 
 # Create FastAPI application
@@ -35,6 +36,7 @@ app.include_router(auth_router)
 app.include_router(role_router)
 app.include_router(data_router)
 app.include_router(random_forest_router)
+app.include_router(kmean_router)
 
 # Create all database tables
 Base.metadata.create_all(bind=engine)

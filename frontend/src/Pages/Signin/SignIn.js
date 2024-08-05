@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL } from "../../apiConfig";
@@ -25,33 +25,36 @@ const SignIn = () => {
   // ======================================================================================================================
   // Purpose: EvEnt handler function responsible for submitting the data to the backend:
   const handleSubmit = async (e) => {
+    // 1) Prevent the default behavior of javascript of refreshing the page
     e.preventDefault();
     console.log(formData);
+    // 2) Attempt to send the login payload to the appropriate endpoint in the backend:
     try {
       const postData = { email: formData.email, password: formData.password };
       const response = await axios.post(API_BASE_URL + "/auth/login", postData);
-
+      // 2.1) If login was successful, store the JWT token in the localStorage:
       if (response.status === 200) {
         console.log("Login successful:", response.data);
+        // 2.1) Store the JWT token in the localStorage:
+        localStorage.setItem("token", JSON.stringify(response.data));
+        // 2.2) Store the  access token to store it in the header:
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.access_token}`;
+        console.log(
+          "Accss token successfully added to the header during login."
+        );
+        // 2.3) Set the state to false to enable navigation to the home page:
         setDataSubmitted(true);
       }
+      // If login was unsuccessful, display the error:
     } catch (error) {
       console.log(
-        "Error during login:",
+        "An error occured during login:",
         error.response ? error.response.data : error.message
       );
     }
   };
-
-  // ======================================================================================================================
-  // Purpose: UseEffect hook reponsible for calling a cleanup function after the functional component is about to unmount:
-  // []: Array of dependencies that indicates the hook to run only once the functional component is about to unmount:
-  // Enables the dataSubmitted state to be reset to false after the user submit the data:
-  useEffect(() => {
-    return () => {
-      setDataSubmitted(false);
-    };
-  }, []);
 
   // ======================================================================================================================
   // Assess if the data was submitted correctly if yes => redirect the user to the home page:

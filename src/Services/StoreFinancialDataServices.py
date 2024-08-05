@@ -24,7 +24,7 @@ async def write_date_when_retrieved() -> bool:
   try:
     with open(DATE_FILE_PATH, "a") as file:
       # file.write(f"{todays_date}\n")
-      file.write(todays_date)
+      file.write(f"{todays_date}\n")
       logger.info(f"{todays_date} was successfully added into {DATE_FILE_PATH}")
       return True
   
@@ -79,41 +79,6 @@ async def convert_df_to_csv(df: pd.DataFrame) -> bool:
 
 
 
-# # Async function that gathers daily financial data to store it in a CSV file:
-# async def store_data_into_cvs(tickers: list) -> bool:
-#   # 1) Initialize an empty dataframe to store all the financial data:
-#   final_df = pd.DataFrame()
-#   # 2) Iterate through all ticker in tickers:
-#   for ticker in tickers:
-#     # 2.1) Gather the stock's financial data for past 5y:
-#     stock = yf.Ticker(ticker)
-#     stock_df = stock.history(period="5y")
-#     # 2.2) Assess if there df is empty => don't use this stock
-#     if not stock_df.empty:
-#       # 2.3) Add the stock's ticker symbol as a column:
-#       stock_df['Ticker'] = ticker
-#       # 2.4) append stock_df into the dataframe that will be converted into a CSV file:
-#       final_df = pd.concat([final_df, stock_df])
-#     else:
-#        logger.info(f"No financial data could be gathered for the following stock {ticker}")
-
-#   # 3) Assess whether the final dataframe is empty:
-#   if final_df.empty:
-#     logger.error(f"Error: The dataframe used to store all stock's financial result is empty")
-#     return False
-  
-#   # 4) If final DF not empty, attempt to convert it in CVS
-#   result = await convert_df_to_csv(final_df)
-#   # 5) If operation was successful attempt to write the date where data ends_
-#   if result:
-#      return await write_date_when_retrieved()
-#   return False
-
-
-
-
-
-
 # Async function that gathers daily financial data to store it in a CSV file:
 async def store_data_into_cvs(tickers: list) -> bool:
   # 1) Initialize an empty dataframe to store all the financial data:
@@ -122,7 +87,7 @@ async def store_data_into_cvs(tickers: list) -> bool:
   for ticker in tickers:
     # 2.1) Gather the stock's financial data for past 5y:
     stock = yf.Ticker(ticker)
-    stock_df = stock.history(start="2024-07-01", end="2024-07-21")
+    stock_df = stock.history(period="5y")
     # 2.2) Assess if there df is empty => don't use this stock
     if not stock_df.empty:
       # 2.3) Add the stock's ticker symbol as a column:
@@ -143,6 +108,41 @@ async def store_data_into_cvs(tickers: list) -> bool:
   if result:
      return await write_date_when_retrieved()
   return False
+
+
+
+
+
+
+# # Async function that gathers daily financial data to store it in a CSV file:
+# async def store_data_into_cvs(tickers: list) -> bool:
+#   # 1) Initialize an empty dataframe to store all the financial data:
+#   final_df = pd.DataFrame()
+#   # 2) Iterate through all ticker in tickers:
+#   for ticker in tickers:
+#     # 2.1) Gather the stock's financial data for past 5y:
+#     stock = yf.Ticker(ticker)
+#     stock_df = stock.history(start="2024-07-01", end="2024-07-21")
+#     # 2.2) Assess if there df is empty => don't use this stock
+#     if not stock_df.empty:
+#       # 2.3) Add the stock's ticker symbol as a column:
+#       stock_df['Ticker'] = ticker
+#       # 2.4) append stock_df into the dataframe that will be converted into a CSV file:
+#       final_df = pd.concat([final_df, stock_df])
+#     else:
+#        logger.info(f"No financial data could be gathered for the following stock {ticker}")
+
+#   # 3) Assess whether the final dataframe is empty:
+#   if final_df.empty:
+#     logger.error(f"Error: The dataframe used to store all stock's financial result is empty")
+#     return False
+  
+#   # 4) If final DF not empty, attempt to convert it in CVS
+#   result = await convert_df_to_csv(final_df)
+#   # 5) If operation was successful attempt to write the date where data ends_
+#   if result:
+#      return await write_date_when_retrieved()
+#   return False
 
 
 
