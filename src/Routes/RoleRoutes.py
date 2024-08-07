@@ -30,3 +30,11 @@ async def update_role(data: UpdateRoleFields, session: Session = Depends(get_db)
         raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
     await UserController.update_user_role(data.email, data.new_role, session)
     return {"message": f"User with email {data.email} has been assigned a new role: {data.new_role}"}
+
+
+### Get the role of the current user ###
+@role_router.get('/get-user-role', status_code=status.HTTP_200_OK)
+async def retrieve_role(current_user: User = Depends(get_current_user)):
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not authorized")
+    return await UserController.get_user_role(current_user)

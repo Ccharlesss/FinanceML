@@ -36,7 +36,8 @@ const SignIn = () => {
       if (response.status === 200) {
         console.log("Login successful:", response.data);
         // 2.1) Store the JWT token in the localStorage:
-        localStorage.setItem("token", JSON.stringify(response.data));
+        // localStorage.setItem("token", JSON.stringify(response.data));
+        localStorage.setItem("token", response.data.access_token);
         // 2.2) Store the  access token to store it in the header:
         axios.defaults.headers.common[
           "Authorization"
@@ -112,3 +113,141 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+// import React, { useState } from "react";
+// import { Navigate, NavLink } from "react-router-dom";
+// import axios from "axios";
+// import { API_BASE_URL } from "../../apiConfig";
+
+// import { useDispatch } from "react-redux";
+// import { setIsAdminTrue, setIsAdminFalse } from "../../Reducers/RoleReducer";
+
+// // Imports for CSS styling:
+// import "./SignIn.css";
+// // Imports for Icons:
+// import { FaRegEyeSlash } from "react-icons/fa";
+
+// const SignIn = () => {
+//   // States that are involved in the Sign in process:
+//   const [formData, setFormData] = useState({ email: "", password: "" });
+//   const [dataSubmitted, setDataSubmitted] = useState(false);
+//   const dispatch = useDispatch(); // Add dispatch to manage role state
+
+//   // Purpose: Event handler function responsible for updating the state based on the change in the input fields:
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.id]: e.target.value });
+//   };
+
+//   // Purpose: Event handler function responsible for submitting the data to the backend:
+//   const handleSubmit = async (e) => {
+//     // 1) Prevent the default behavior of javascript of refreshing the page
+//     e.preventDefault();
+//     console.log(formData);
+//     // 2) Attempt to send the login payload to the appropriate endpoint in the backend:
+//     try {
+//       const postData = { email: formData.email, password: formData.password };
+//       const response = await axios.post(API_BASE_URL + "/auth/login", postData);
+//       // 2.1) If login was successful, store the JWT token in the localStorage:
+//       if (response.status === 200) {
+//         console.log("Login successful:", response.data);
+//         // 2.1) Store the JWT token in the localStorage:
+//         localStorage.setItem("token", response.data.access_token);
+//         // 2.2) Store the access token to store it in the header:
+//         axios.defaults.headers.common[
+//           "Authorization"
+//         ] = `Bearer ${response.data.access_token}`;
+//         console.log(
+//           "Access token successfully added to the header during login."
+//         );
+
+//         // 2.3) Fetch the user's role:
+//         try {
+//           const roleResponse = await axios.get(
+//             `${API_BASE_URL}/roles/get-user-role`,
+//             {
+//               headers: {
+//                 Authorization: `Bearer ${response.data.access_token}`, // Add token to the request headers
+//               },
+//             }
+//           );
+
+//           if (roleResponse.status === 200) {
+//             const userRole = roleResponse.data.role; // Assuming role is in roleResponse.data.role
+//             if (userRole === "Admin") {
+//               dispatch(setIsAdminTrue());
+//               console.log("User is an Admin");
+//             } else {
+//               dispatch(setIsAdminFalse());
+//               console.log("User isn't an Admin");
+//             }
+//           }
+//         } catch (error) {
+//           console.log("Error fetching user role:", error);
+//         }
+
+//         // 2.4) Set the state to false to enable navigation to the home page:
+//         setDataSubmitted(true);
+//       }
+//       // If login was unsuccessful, display the error:
+//     } catch (error) {
+//       console.log(
+//         "An error occurred during login:",
+//         error.response ? error.response.data : error.message
+//       );
+//     }
+//   };
+
+//   // Assess if the data was submitted correctly if yes => redirect the user to the home page:
+//   if (dataSubmitted) {
+//     return <Navigate to="home" />;
+//   }
+
+//   return (
+//     <div className="container-form">
+//       <div className="sign-in-form">
+//         <div className="form-content">
+//           <header>Login</header>
+//           <form onSubmit={handleSubmit}>
+//             <div className="field input-field">
+//               <input
+//                 type="email"
+//                 placeholder="Email"
+//                 id="email"
+//                 onChange={handleChange}
+//                 value={formData.email}
+//               />
+//             </div>
+//             <div className="field input-field">
+//               <input
+//                 type="password"
+//                 placeholder="Password"
+//                 id="password"
+//                 onChange={handleChange}
+//                 value={formData.password}
+//               />
+//               <i className="eye-icon">
+//                 <FaRegEyeSlash />
+//               </i>
+//             </div>
+//             <div className="form-link">
+//               <NavLink to="/forgot-password" className="forgot-password">
+//                 Forgot password
+//               </NavLink>
+//             </div>
+//             <div className="field button-field">
+//               <button>Sign In</button>
+//             </div>
+//             <div className="form-link">
+//               <span>Don't have an account?</span>
+//               <NavLink to="/sign-up" className="sign-up-link">
+//                 Sign up
+//               </NavLink>
+//             </div>
+//           </form>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SignIn;

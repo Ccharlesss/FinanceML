@@ -126,7 +126,11 @@ async def update_user_role(email: str, new_role: str, session: Session):
         session.rollback()
         logger.error(f"Failed to update role for user {user.email}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to update user role: {str(e)}")
+    
 
+### Get the role of the user ###
+async def get_user_role(current_user: User) -> str:
+    return current_user.role
 
 ### ========================================================================================================
 ###                                           LOGIN / LOGOUT FUNC

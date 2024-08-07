@@ -45,31 +45,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 SPECIAL_CHARACTERS = ['@', '#', '%', '=', ':', '?', '.', '/', '|', '~', '>', '<', '$', '!', '£']
 
 
-
-
-# def get_current_user(token: str = Security(oauth2_scheme), db: Session = Depends(get_db)) -> User:
-#     logging.info(f"Token received: {token}")
-#     try:
-#         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
-#         user_id: str = payload.get("sub")
-#         if user_id is None:
-#             logging.error("User ID not found in token payload")
-#             raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-#         user_id = str_decode(user_id)
-#     except JWTError as e:
-#         logging.error(f"JWT Error: {e}")
-#         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-    
-#     user = db.query(User).filter(User.id == user_id).first()
-#     if user is None:
-#         logging.error("User not found in the database")
-#         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-    
-#     logging.info(f"Authenticated user: {user.email}")
-#     return user
-
-
-
 # Purpose: Hash a password to secure it:
 def hash_password(password: str) -> str:
   return pwd_context.hash(password)

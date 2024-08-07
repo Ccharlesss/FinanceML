@@ -16,25 +16,62 @@ const Navbar = () => {
 
   // ======================================================================================================================
   // Purpose: Send the logout request to the backend to the appropriate endpoint:
+  // const handleLogout = async (e) => {
+  //   // 1) Attempt to get the token stored in the local storage:
+  //   // const token = JSON.parse(localStorage.getItem("token"));
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     console.log("Error: No JWT token or access token found.");
+  //     return;
+  //   }
+
+  //   // 2) If a JWT token is found in the local storage, get the access token:
+  //   const access_token = token.access_token;
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_BASE_URL}/auth/logout`,
+  //       // Empty object for the request body:
+  //       {},
+  //       // Send the access token in the header:
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${access_token}`,
+  //         },
+  //       }
+  //     );
+
+  //     // 3.1 If logout is successful, remove the token from the local storage:
+  //     if (response.status === 200) {
+  //       console.log("Successfully logged out:", response.data);
+  //       localStorage.removeItem("token");
+  //       window.location.href = "/";
+  //     }
+  //   } catch (error) {
+  //     console.log(
+  //       "An error occurred during the logout process:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //   }
+  // };
+
   const handleLogout = async (e) => {
     // 1) Attempt to get the token stored in the local storage:
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (!token || !token.access_token) {
+    const token = localStorage.getItem("token");
+    if (!token) {
       console.log("Error: No JWT token or access token found.");
       return;
     }
 
-    // 2) If a JWT token is found in the local storage, get the access token:
-    const access_token = token.access_token;
+    // 2) Use the token directly in the authorization header:
     try {
       const response = await axios.post(
         `${API_BASE_URL}/auth/logout`,
         // Empty object for the request body:
         {},
-        // Send the access token in the header:
+        // Send the token in the header:
         {
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${token}`, // Use the token directly
           },
         }
       );
