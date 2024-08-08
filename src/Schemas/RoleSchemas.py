@@ -7,5 +7,6 @@ class AssignRoleFields(BaseModel):
 
 class UpdateRoleFields(BaseModel):
 # Required fields to update the role of a user:
-  email: EmailStr
+  # email: EmailStr
+  user_id: int
   new_role:str

@@ -13,6 +13,8 @@ from src.Controllers import UserController
 # Imports from Schemas:
 from src.Models.UserModel import User
 from src.Schemas.UserSchemas import UserCreate
+from src.Schemas.UserSchemas import UpdateUsernameField
+from src.Schemas.UserSchemas import UpdateUserDetailsField
 from src.Schemas.AuthSchemas import VerifyUserFields
 from src.Schemas.FreezeAccountSchemas import FreezeAccountFields
 
@@ -46,25 +48,68 @@ async def get_all_users(session: Session = Depends(get_db), current_user: User =
 
 
 
-@user_router.put('/deactivate-user-account', status_code=status.HTTP_200_OK, response_model=UserResponse)
-async def deactivate_user_account(data: FreezeAccountFields, session: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+# @user_router.put('/deactivate-user-account', status_code=status.HTTP_200_OK, response_model=UserResponse)
+# async def deactivate_user_account(data: FreezeAccountFields, session: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     if not current_user:
+#         raise HTTPException(status_code=401, detail="Not authorized")
+#     if not current_user.role == "Admin":
+#         raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+#     # await UserController.freeze_user_account(data, session)
+#     # return {"message": f"User with email {data.email} and username {data.username} has been deactivated"}
+#     user = await UserController.freeze_user_account(data, session)
+#     return user
+
+
+# @user_router.put('/reactivate-user-account', status_code=status.HTTP_200_OK, response_model=UserResponse)
+# async def reactiveate_user_account(data: FreezeAccountFields, session: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+#     if not current_user:
+#         raise HTTPException(status_code=401, detail="Not authorized")
+#     if not current_user.role == "Admin":
+#         raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+#     # return await UserController.unfreeze_user_account(data, session)
+#     # return {"message": f"User with email {data.email} and username {data.username} has been reactivated"}
+#     user = await UserController.unfreeze_user_account(data, session)
+#     return user 
+
+
+#New:
+@user_router.put('/block-user-account', status_code=status.HTTP_200_OK, response_model=UserResponse)
+async def block_user_account(data: FreezeAccountFields, session:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authorized")
     if not current_user.role == "Admin":
         raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
-    # await UserController.freeze_user_account(data, session)
-    # return {"message": f"User with email {data.email} and username {data.username} has been deactivated"}
-    user = await UserController.freeze_user_account(data, session)
+    user = await UserController.freeze_user_account(data.user_id, session)
     return user
 
 
-@user_router.put('/reactivate-user-account', status_code=status.HTTP_200_OK, response_model=UserResponse)
-async def reactiveate_user_account(data: FreezeAccountFields, session: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+@user_router.put('/unblock-user-account', status_code=status.HTTP_200_OK, response_model=UserResponse)
+async def unblock_user_account(data: FreezeAccountFields, session:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authorized")
     if not current_user.role == "Admin":
         raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
-    # return await UserController.unfreeze_user_account(data, session)
-    # return {"message": f"User with email {data.email} and username {data.username} has been reactivated"}
-    user = await UserController.unfreeze_user_account(data, session)
-    return user 
+    user = await UserController.unfreeze_user_account(data.user_id, session)
+    return user
+
+
+# ============================================================================================================================================================
+
+
+@user_router.put('/update-username', status_code=status.HTTP_200_OK)
+async def update_username(data: UpdateUsernameField, session:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not authorized")
+    if not current_user.role == "Admin":
+        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+    await UserController.update_user_name(data.user_id, data.new_username, session)
+    return {"message": f"User with id with {data.user_id} has been assigned a new username {data.new_username}"}
+
+@user_router.put('/update-user-details', status_code=status.HTTP_200_OK)
+async def update_user(data: UpdateUserDetailsField, session:Session = Depends(get_db), current_user:User=Depends(get_current_user)):
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not authorized")
+    if not current_user.role == "Admin":
+        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+    return await UserController.update_user_details(data.user_id, data.new_username, data.new_user_role, session)
+
