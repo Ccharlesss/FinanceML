@@ -14,7 +14,7 @@ from src.Models.TokenModel import Token
 # ========================================================================================================================
 settings = get_settings()
 
-
+# Purpose: Generate the JWT token:
 async def _generate_tokens(user, session):
     refresh_key = unique_string(100)
     access_key = unique_string(50)
@@ -51,6 +51,7 @@ async def _generate_tokens(user, session):
         "expires_in": at_expires.seconds
     }
 
+# Purpose: Get the refresh token:
 async def get_refresh_token(refresh_token, session):
     token_payload = get_token_payload(refresh_token, settings.SECRET_KEY, settings.JWT_ALGORITHM)
     if not token_payload:

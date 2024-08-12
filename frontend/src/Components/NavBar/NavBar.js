@@ -200,6 +200,11 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/kmeans" className="nav-link">
+              kmean algorithm
+            </NavLink>
+          </li>
           {isAdmin && (
             <li>
               <NavLink to="/users" className="nav-link">

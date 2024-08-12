@@ -25,7 +25,8 @@ from src.Context.StockContext import CSV_FILE_PATH, SP500
 
 
 
-
+### ========================================================================================================
+###                                    Retrieve data From CSV to DF on all tickers:
 async def retrieve_data_to_df() -> pd.DataFrame:
     try:
         # 1) Load the CSV file into a DataFrame
@@ -42,6 +43,11 @@ async def retrieve_data_to_df() -> pd.DataFrame:
         return pd.DataFrame()
 
 
+
+
+
+### ========================================================================================================
+###                      Compute Financial Features X = {Avr annual return, Avr annual volatility}: 
 
 ### Purpose: Compute Avr annual return and volatility of all stocks and return it in a DF:
 async def compute_avg_annual_return_and_volatility(df: pd.DataFrame) -> pd.DataFrame:
@@ -66,6 +72,8 @@ async def compute_avg_annual_return_and_volatility(df: pd.DataFrame) -> pd.DataF
 
 
 
+### ========================================================================================================
+###                                        Remove outliers in Kmeans:
 
 ### Purpose: Remove potential outliers that would induce biais in the kmean algorithm:
 async def remove_outliers_iqr(df: pd.DataFrame) -> pd.DataFrame:
@@ -92,7 +100,8 @@ async def remove_outliers_iqr(df: pd.DataFrame) -> pd.DataFrame:
   
 
   
-
+### ========================================================================================================
+###                                        Perform the Kmeans model:
 async def perform_kmeans_and_create_dataframe(df: pd.DataFrame, n_clusters: int = 4, random_state: int = 42) -> str:
     # 1) Ensure the DataFrame has the required columns:
     if 'Avr Annual Return' not in df.columns or 'Avr Annual Volatility' not in df.columns:
@@ -128,6 +137,10 @@ async def perform_kmeans_and_create_dataframe(df: pd.DataFrame, n_clusters: int 
         return None  # Return None if any error occurs
 
 
+
+
+### ========================================================================================================
+###                                      Orchestrate Kmean computation:
 ### Purpose: Generate the Kmean and return an interactive graph:
 async def orchestrate_kmean_and_plot():
   # 1) Attempt to retrieve Data from CSV file and convert it to pd.DataFrame:
@@ -155,72 +168,3 @@ async def orchestrate_kmean_and_plot():
   if result is None:
     logger.error("An error occured in the computation of Kmean and the generation of the plot.")
   return result
-
-
-
-
-
-# ### Perform the KMeans algorithm and generate the plot:
-# async def perform_kmeans_and_plot(df: pd.DataFrame, n_clusters: int = 4, random_state: int = 42) -> Figure:
-#   # 1) Ensure the DataFrame has the required columns:
-#   if 'Avr Annual Return' not in df.columns or 'Avr Annual Volatility' not in df.columns:
-#     logger.error("error: df inserted in the Kmean algo doesn't contain the required Columns for computation.")
-#     return None
-#   # 2) Attempt to perform the Kmean algorithm:
-#   try:
-#     # 2.1) Extract the relevant data from the DataFram:
-#     dataset = df[['Avr Annual Return', 'Avr Annual Volatility']].values
-#     # 2.2) Initialize the K-Mean algorithm:
-#     kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
-#     # 2.3) Fit the K-Means algorithm to the dataset:
-#     kmeans.fit(dataset)
-#     # 2.4) Extract the x and y coordinates from the dataset:
-#     x = dataset[:,0] # Avr Annual Return
-#     y = dataset[:,1] # Avr Annual Volatility
-#     # 2.5) Create a DataFrame for Plotly:
-#     plot_data = pd.DataFrame({
-#         'Ticker': SP500,
-#         'Avr Annual Return': x,
-#         'Avr Annual Volatility': y,
-#         'Cluster': kmeans.labels_
-#     })
-    
-#     # 2.6) Create an interactive scatter plot using Plotly:
-#     fig = px.scatter(plot_data,
-#                      x='Avr Annual Return',
-#                      y='Avr Annual Volatility',
-#                      color='Cluster',
-#                      hover_name='Ticker',  # Display the ticker on hover
-#                      title='K-Means Clustering of Stocks',
-#                      labels={'Avr Annual Return': 'Average Annual Return',
-#                              'Avr Annual Volatility': 'Average Annual Volatility'},
-#                      color_continuous_scale='Viridis')
-    
-#     # 2.7) Add centroids to the plot
-#     centroids = kmeans.cluster_centers_
-#     centroid_df = pd.DataFrame(centroids, columns=['Avr Annual Return', 'Avr Annual Volatility'])
-#     centroid_df['Cluster'] = range(n_clusters)  # Add cluster labels for centroids
-    
-#     # 2.8) Plot centroids on the same figure:
-#     fig.add_scatter(x=centroid_df['Avr Annual Return'], 
-#                      y=centroid_df['Avr Annual Volatility'], 
-#                      mode='markers',
-#                      marker=dict(size=15, color='red', symbol='cross'),
-#                      name='Centroids',
-#                      text=["Centroid {}".format(i) for i in range(n_clusters)])  # Add labels for centroids
-    
-#     # 2.9) Update layout for better visibility and make it square-shaped:
-#     fig.update_layout(
-#         height=800,  # Increased height
-#         width=1000,   # Increased width
-#         title_x=0.5,  # Center the title
-#         xaxis_title='Average Annual Return',
-#         yaxis_title='Average Annual Volatility'
-#     )
-#     # 3) Return the fig object:
-#     return fig  
-
-#   except Exception as e:
-#     logger.error(f"An error occurred while performing K-Means clustering or plotting: {e}")
-#     return None  # Return None if any error occurs
-

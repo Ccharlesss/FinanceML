@@ -44,6 +44,7 @@ async def get_latest_date_of_financial_data() -> str:
     # 1.2) of file_size == 0 => file is empty:
     if file_size == 0:
       logger.info(f"No dates are stored into {DATE_FILE_PATH}")
+      print(f"No dates are stored into {DATE_FILE_PATH}")
       return None
    
     # 1.2) If file exist and isn't empty => extract lastest date:
@@ -56,6 +57,7 @@ async def get_latest_date_of_financial_data() -> str:
             return latest_date
           else:
             logger.info(f"No dates are stored in {DATE_FILE_PATH}")
+            print(f"No dates are stored in {DATE_FILE_PATH}")
             return None
   except FileNotFoundError as e:
     logger.error(f"error: {e}")
@@ -114,7 +116,7 @@ async def store_data_into_cvs(tickers: list) -> bool:
 
 
 
-# # Async function that gathers daily financial data to store it in a CSV file:
+# Async function that gathers daily financial data to store it in a CSV file:
 # async def store_data_into_cvs(tickers: list) -> bool:
 #   # 1) Initialize an empty dataframe to store all the financial data:
 #   final_df = pd.DataFrame()
@@ -122,7 +124,7 @@ async def store_data_into_cvs(tickers: list) -> bool:
 #   for ticker in tickers:
 #     # 2.1) Gather the stock's financial data for past 5y:
 #     stock = yf.Ticker(ticker)
-#     stock_df = stock.history(start="2024-07-01", end="2024-07-21")
+#     stock_df = stock.history(start="2024-07-01", end="2024-08-06")
 #     # 2.2) Assess if there df is empty => don't use this stock
 #     if not stock_df.empty:
 #       # 2.3) Add the stock's ticker symbol as a column:
@@ -233,14 +235,16 @@ async def get_missing_recent_data(tickers: list) -> bool:
     # 2) Set the last closing day you want to get:
     yesterday_closing_date = datetime.now().strftime("%Y-%m-%d")
     logger.info(f"Yesterday's closing price is: {yesterday_closing_date}")
+    print(f"Yesterday's closing price is: {yesterday_closing_date}")
     # 3) Attempt to retrieve the most recent date worth of financial data from txt file:
     # 3) This date represents the latest closing date of data we have in the csv file:
     last_closing_date_in_csv = await get_latest_date_of_financial_data()
     logger.info(f"The last closing date in CSV retrieved is: {last_closing_date_in_csv}")
+    print((f"The last closing date in CSV retrieved is: {last_closing_date_in_csv}"))
     # 3.1) If operation was successful: Convert the date to strptime in the format YYYY-MM-DD:
     if last_closing_date_in_csv:
         last_closing_date_in_csv = (datetime.strptime(last_closing_date_in_csv, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
-    
+        print(f"last closing date in CSV: {last_closing_date_in_csv}")
         # 4) Iterate through all tickers in the list:
         for ticker in tickers:
             # 4.1) Gather all financial data from last_closing_date to the most recent one = yesterday_closing_date:

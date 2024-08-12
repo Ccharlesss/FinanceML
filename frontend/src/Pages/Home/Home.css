@@ -1,0 +1,79 @@
+/* Home.css */
+.button-container {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  transition: max-height 0.4s ease, padding-bottom 0.4s ease;
+  overflow: hidden;
+}
+
+.button-container.expanded {
+  max-height: 1000px; /* Adjust this value based on the height of your graph */
+  padding-bottom: 20px;
+}
+
+.button-container.collapsed {
+  max-height: 180px;
+  padding-bottom: 0;
+}
+
+.button-container p {
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 20px;
+}
+
+.button-container .custom-tooltip {
+  background-color: #f9f9f9;
+  border: 1px solid #d3d3d3;
+  padding: 10px;
+  border-radius: 5px;
+  color: #333;
+}
+
+.button-container .label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.custom-button {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #4c72e3;
+}
+
+.graph-container {
+  margin-top: 20px;
+}
+
+.prediction-container {
+  margin-top: 40px;
+  padding: 20px;
+  border: 1px solid #d3d3d3;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-result {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

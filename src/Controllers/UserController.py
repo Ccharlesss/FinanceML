@@ -56,7 +56,7 @@ async def create_user_account(data, session, background_tasks):
 
 
 
-# Purpose: Activate the user account:
+### Purpose: Activate the user account:
 async def activate_user_account(data, session: Session, background_tasks: BackgroundTasks):
     # 1) Load user using the load_user function:
     user = await load_user(data.email, session)
@@ -107,76 +107,13 @@ async def assign_role_to_user(email: str, role_name: str, session: Session):
     session.commit()
 
 
-### Update the role of a user ###
-# async def update_user_role(email: str, new_role: str, session: Session):
-#     """Updates the role of a user."""
-#     user = session.query(User).filter(User.email == email).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail=f"User with email {email} not found")
-    
-#     current_role = user.role
-#     logger.info(f"Updating role for user {user.email} from {current_role} to {new_role}")
-#     user.role = new_role
-
-#     try:
-#         session.commit()
-#         session.refresh(user)  # Refresh the user instance to reflect the latest state from the database
-#         logger.info(f"Role updated successfully for user {user.email} to {user.role}")
-#     except Exception as e:
-#         session.rollback()
-#         logger.error(f"Failed to update role for user {user.email}: {str(e)}")
-#         raise HTTPException(status_code=500, detail=f"Failed to update user role: {str(e)}")
-    
 
 
-
-
-### Update the role of a user ###
-async def update_user_role(id: int, new_role: str, session: Session):
-    """Updates the role of a user."""
-    user = session.query(User).filter(User.email == id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail=f"User with email {id} not found")
-    
-    current_role = user.role
-    logger.info(f"Updating role for user {user.id} from {current_role} to {new_role}")
-    user.role = new_role
-
-    try:
-        session.commit()
-        session.refresh(user)  # Refresh the user instance to reflect the latest state from the database
-        logger.info(f"Role updated successfully for user {user.id} to {user.role}")
-    except Exception as e:
-        session.rollback()
-        logger.error(f"Failed to update role for user {user.id}: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to update user role: {str(e)}")
-    
-    
-
-### Get the role of the user ###
+### Purpose: Get the role of the user ###
 async def get_user_role(current_user: User) -> str:
     return current_user.role
 
-
-
-async def update_user_name(id: int, new_username: str, session: Session):
-    user = session.query(User).filter(User.id == id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail=f"User w/ ID ={id} not found.")
-    current_username = user.username
-    logger.info(f"Successfully changed username from {current_username} to {new_username}")
-    user.username = new_username
-
-    try:
-        session.commit()
-        session.refresh(user)
-        logger.info(f"username successfully changed in the database from {current_username} to {new_username}.")
-    except Exception as e:
-        session.rollback()
-        logger.error("failed to update the username from {current_username} to {new_username}.")
-        raise HTTPException(status_code=500, detail=f"Failed to update user role: {str(e)}")
-    
-
+### Purpose: Update the role of a user:
 async def update_role(user: User, old_role: str, new_role: str, session: Session):
     user.role = new_role
     try:
@@ -188,6 +125,7 @@ async def update_role(user: User, old_role: str, new_role: str, session: Session
         logger.error(f"Failed to update the user's role from {old_role} to {new_role}")
         raise HTTPException(status_code=500, detail=f"Failed to update user role: {str(e)}")
 
+### Purpose: Update username of a user:
 async def update_username(user: User, old_username: str, new_username: str, session: Session):
     user.username = new_username
     try:
@@ -199,6 +137,7 @@ async def update_username(user: User, old_username: str, new_username: str, sess
         logger.error(f"Failed to update username from {old_username} to {new_username}.")
         raise HTTPException(status_code=500, detail=f"Failed to update username: {str(e)}")
 
+# Purpose: Update user's details:
 async def update_user_details(id: int, new_username: str, new_role: str, session: Session):
     user = session.query(User).filter(User.id == id).first()
     if not user:
@@ -318,30 +257,9 @@ async def list_all_users(session: Session):
 
 
 
-
 ### ========================================================================================================
-###                                            Deactivate User Account
-# async def freeze_user_account(data, session: Session):
-#     # 1) Try to retrieve the user from the database:
-#     user = await load_user(data.email, session)
-#     if not user:
-#         raise HTTPException(status_code=400, detail="No user with the following email {data.email} has been found.")
-#     # 2) Verify if the username retrieved matches the one of the user:
-#     if user.username != data.username:
-#         raise HTTPException(status_code=400, detail="The Username {data.username} doesn't match the one retrieved from the DB.")
-#     # 3) Modify the active status of user to False:
-#     user.is_active = False
-#     # 4) Attempt to commit this change to the DB:
-#     try:
-#         session.commit()
-#         session.refresh(user)
-#         logger.info("User Account has been froozen.")
-#         return user
-#     except Exception as e:
-#         session.rollback()
-#         logger.error(f"Failed to freeze user's account: {e}")
-#         raise HTTPException(status_code=500, detail="Failed to freeze user's account: {e}")
-    
+###                                            De-activate User Account
+
 
 async def freeze_user_account(id: int, session: Session):
     # 1) Try to retrive the user from the database:
@@ -363,32 +281,8 @@ async def freeze_user_account(id: int, session: Session):
     
 
 
-    
-
 ### ========================================================================================================
 ###                                            Re-activate User Account
-# async def unfreeze_user_account(data, session: Session):
-#     # 1) Try to retrieve the user from the database:
-#     user = await load_user(data.email, session)
-#     if not user:
-#         raise HTTPException(status_code=400, detail="No user with the following email {data.email} has been found.")
-#     # 2( Verify if the username retrieved matches the one of the user:
-#     if user.username != data.username:
-#         raise HTTPException(status_code=400, detail="The Username {data.username} doesn't match the one retrieved from the DB.")
-#     # 3) Modify the active status of the user to True:
-#     user.is_active = True
-#     # 4) Attempt to commit this change to the DB:
-#     try:
-#         session.commit()
-#         session.refresh(user)
-#         logger.info("User's account has been re-activated.")
-#         return user
-#     except Exception as e:
-#         session.rollback()
-#         logger.error(f"Failed to re-activate user's account: {e}")
-#         raise HTTPException(status_code=500, detail="Failed to re-activate user's account: {e}")
-    
-
 async def unfreeze_user_account(id: int, session: Session):
     # 1) Try to retrive the user from the database:
     user = session.query(User).filter(User.id == id).first()

@@ -18,7 +18,8 @@ from ta.trend import MACD
 from ta.volume import OnBalanceVolumeIndicator
 
 # Import the File where all training data is located:
-from src.Context.StockContext import CSV_FILE_PATH
+from src.Context.StockContext import CSV_FILE_PATH, SP500
+
 
 
 
@@ -48,14 +49,13 @@ async def retrieve_data_from_cvs_to_df(ticker: str) -> pd.DataFrame:
 
 
 
-
-
-
 ### ========================================================================================================
 ###                  COMPUTE RSA / K% / D% / R% / PROC / MACD / MACD_Signal / MACD_Diff / OBV
+
+### Purpose: Compute RSI:
 async def compute_rsi(data: pd.DataFrame) -> pd.DataFrame:
     # 1) verif if the DataFrame is empty:
-    if data.empty():
+    if data.empty:
         logger.error(f"The data frame for the computation of the RSI is empty. Cant compute RSI")
         return None
     
@@ -87,6 +87,7 @@ async def compute_rsi(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+### Purpose: Compute the Srochastic oscillator = {K%, D%, R%}:
 async def compute_stochastic_oscillators(data: pd.DataFrame, window=14, smooth_window=3) -> pd.DataFrame:
      # 1) Initialize the stochastic Oscillator:
     stoch = StochasticOscillator(high=data['High'],low=data['Low'],close=data['Close'],window=window,smooth_window=smooth_window)
@@ -103,6 +104,7 @@ async def compute_stochastic_oscillators(data: pd.DataFrame, window=14, smooth_w
     return data
 
 
+### Purpose: Compute the PROC:
 async def compute_proc(data: pd.DataFrame, window=14) -> pd.DataFrame:
     # 1) Initialize ROCIndicator:
     roc = ROCIndicator(close=data["Close"],window=window)
@@ -114,7 +116,7 @@ async def compute_proc(data: pd.DataFrame, window=14) -> pd.DataFrame:
         return None
     return data
 
-
+### Purpose: Compute the MACD:
 async def compute_macd(data: pd.DataFrame, window_slow=26, window_fast=12, window_sign=9) -> pd.DataFrame:
     # 1) Initialize MACD indicator:
     macd = MACD(close=data["Close"], window_slow=window_slow, window_fast=window_fast, window_sign=window_sign)
@@ -131,6 +133,7 @@ async def compute_macd(data: pd.DataFrame, window_slow=26, window_fast=12, windo
     return data
 
 
+### Purpose: Compute the On Balance Value:
 async def compute_obv(data: pd.DataFrame) -> pd.DataFrame:
     # 1) Initialive the OBVIndicator:
     obv = OnBalanceVolumeIndicator(close=data["Close"], volume=data["Volume"])
@@ -143,33 +146,41 @@ async def compute_obv(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+
+### Purpose: Compute Financial Features X and remove Nan values:
 async def compute_features_and_remove_nan(df: pd.DataFrame) -> pd.DataFrame:
     # 1) Compute all financial indicators
     df = await compute_rsi(df)
     if df is None:
         logger.error("An error occured in the computation of RSI.")
         return None
-    df = compute_stochastic_oscillators(df)
+
+    df = await compute_stochastic_oscillators(df)  # await is required here
     if df is None:
         logger.error("An error occured in the computation of K%, D%, or R%.")
         return None
-    df = compute_proc(df)
+
+    df = await compute_proc(df)  # await is required here
     if df is None:
         logger.error("An error occured in the computation of PROC.")
         return None
-    df = compute_macd(df)
+
+    df = await compute_macd(df)  # await is required here
     if df is None:
         logger.error("An error occured in the computation of MACD, MACD_Signal or MACD_Diff.")
         return None
-    df = compute_obv(df)
+
+    df = await compute_obv(df)  # await is required here
     if df is None:
         logger.error("An error occured in the computation of OBV.")
         return None
-    
+
     # 2) Remove Nan values:
     df = df.dropna()
     return df
+
  ### ========================================================================================================   
+
 
 
 
@@ -189,8 +200,8 @@ async def generate_prediction_column(df: pd.DataFrame) -> pd.DataFrame:
     # 1.3) Remove unwanted features:
     df = df.drop(['High', 'Low', 'Close', 'Volume'], axis=1)
     # 2) Assess whether the prediction column contains values 1/0:
-    if df["Prediction"].isin([0,1]).all():
-        logger.error("The Prediction column contains values other than 0 or 1.")
+    if not df["Prediction"].isin([0,1]).all():
+        logger.error("The Prediction column contfshdshfdains values other than 0 or 1.")
         return None
     return df
  ### ========================================================================================================   
@@ -202,7 +213,7 @@ async def generate_prediction_column(df: pd.DataFrame) -> pd.DataFrame:
 
 ### ========================================================================================================
 ###                            Perform the computation for tommorow's closing price trend
-async def compute_random_forest(df: pd.DataFrame) -> int:
+async def compute_random_forest(df: pd.DataFrame):
     # 1) Divide the dataset into features=x and labels=y:
     x_column = df[["RSI", "K%", "R%", "D%", "PROC", "MACD", "MACD_Signal", "MACD_Diff", "OBV"]]
     y_column = df["Prediction"]
@@ -280,11 +291,10 @@ async def compute_random_forest(df: pd.DataFrame) -> int:
     latest_data = x_column.iloc[-1:]
     # 11.2) Makes a prediction for the next day's trend using the best model:
     next_day_prediction = best_forest.predict(latest_data)
+    print(f'Tomorrow\'s closing price trend prediction: {"Higher" if int(next_day_prediction[0]) == 1 else "Lower"}')
     # 11.3) Return the predicted label:
-    return next_day_prediction[0]
+    return int(next_day_prediction[0])
 ### ========================================================================================================
-
-
 
 
 
@@ -293,17 +303,18 @@ async def compute_random_forest(df: pd.DataFrame) -> int:
 async def orchestrate_random_forest(ticker: str) -> int:
   # 1) Retrieve appropriate financial data from the CSV file:
   dataset = await retrieve_data_from_cvs_to_df(ticker)
-  if not dataset:
+  if dataset is None or dataset.empty:
       logger.error(f"Error, the dataFrame Doesn't contain any data")
       return None
   # 2) Compute all the required financial indicators to make the prediction:
   dataset = await compute_features_and_remove_nan(dataset)
-  if dataset is None:
+  if dataset is None or dataset.empty:
       logger.error("An error occured in the computation of financial featues.")
       return None
   # 3) Generate the Preduction column and remove unecessary features {High, Low, Close, Volume}:
   dataset = await generate_prediction_column(dataset)
-  if dataset is None:
+  if dataset is None or dataset.empty:
       logger.error("An error in the generation of the prediction column.")
       return None
   # 4) Predict tomorrow's closing price trend:
+  return await compute_random_forest(dataset)
