@@ -16,7 +16,7 @@ from math import sqrt
 from sklearn.cluster import KMeans 
 
 # Import the tickers from the stock context:
-from src.Context.StockContext import CSV_FILE_PATH, SP500
+from src.Context.StockContext import CSV_FILE_PATH
 
 
 

@@ -154,10 +154,12 @@ async def load_user(email: str, db: Session) -> User:
             logging.info(f"User Found, Email: {email}")
         else:
             logging.info(f"User Not Found, Email: {email}")
+            raise HTTPException(status_code=404, detail="Not found")
     except Exception as user_exec:
         logging.exception(f"An error occurred while fetching the user, Email: {email}")
         user = None
     return user
+
 
 
 # Purpose: Retrieve a user from a JWT token:

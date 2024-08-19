@@ -9,6 +9,7 @@ from src.Configuration.security import hash_password, is_password_strong_enough,
 from src.Context.EmailContext import USER_VERIFY_ACCOUNT
 # Imports from Models:
 from src.Models.UserModel import User
+from src.Models.TokenModel import Token
 # Imports from Controllers:
 from src.Controllers.TokenController import _generate_tokens
 # Imports from Responses:
@@ -171,11 +172,25 @@ async def update_user_details(id: int, new_username: str, new_role: str, session
 ### ========================================================================================================
 ###                                           LOGIN / LOGOUT FUNC
 ### Purpose: Logout of the account ###
+# async def logout_user(current_user: User, session: Session):
+#     # Invalidate the refresh token associated with the current user
+#     current_user.refresh_token = None  # Assuming UserModel has a refresh_token attribute
+#     session.add(current_user)
+#     session.commit()
+
+
 async def logout_user(current_user: User, session: Session):
-    # Invalidate the refresh token associated with the current user
-    current_user.refresh_token = None  # Assuming UserModel has a refresh_token attribute
-    session.add(current_user)
-    session.commit()
+    # Query all tokens associated with the current user
+    user_tokens = session.query(Token).filter(Token.user_id == current_user.id).all()
+
+    if not user_tokens:
+        raise HTTPException(status_code=404, detail="No tokens found for this user.")
+    
+    # Delete all tokens associated with the user
+    for token in user_tokens:
+        session.delete(token)
+    
+    session.commit()  # Commit the changes to the database
 
 
 ### Purpose: Get login token from the user to sign in::
@@ -225,6 +240,10 @@ async def reset_password(data, session):
    # 2) verify if the username matches the data.username entered:
    if user.username != data.username:
       raise HTTPException(status_code=400, detail="No user with the following usernane {data.username} matches the account linked to the email address.")
+   # 3) Verify if the new password is strong enough:
+   if not is_password_strong_enough(data.new_password):
+        raise HTTPException(status_code=400, detail="Password isn't strong enough.")
+
    # 3) update the password in the Dd:
    user.password = hash_password(data.new_password)
    user.updated_at = datetime.now(timezone.utc)
