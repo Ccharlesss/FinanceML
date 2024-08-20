@@ -188,6 +188,4 @@ def get_settings() -> Settings:
     """Get a cached instance of the Settings class."""
     return Settings()
 
-# Example usage
-# settings = get_settings()
-# print(settings.DATABASE_URL)
+

@@ -16,7 +16,7 @@ USER_PASSWORD = "Testpassword64$"
 
 # Get settings and database URL
 settings = get_settings()
-
+print(f"Test DATABASE_URL: {settings.DATABASE_URL}")
 # Create SQLAlchemy engine
 engine = create_engine(settings.DATABASE_URL, connect_args={"check_same_thread": False})
 
@@ -60,3 +60,4 @@ def db_session():
     transaction.rollback()
     connection.close()
     db.close()  # Ensure the session is closed
+

@@ -70,6 +70,8 @@ class LoginData(BaseModel):
 
 settings = get_settings()
 
+
+
 # ===================================================================================================================
 # Test 1: Create user account w/ strong password:
 @pytest.mark.asyncio
@@ -1396,5 +1398,7 @@ async def test_compute_random_forest(client, db_session):
     result = await compute_random_forest(df_with_prediction)
     # 5) Assess if the returned result is in binary format = {0/1}
     assert result in {0, 1}
+
+
 
 

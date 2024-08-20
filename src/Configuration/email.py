@@ -25,23 +25,37 @@ settings = get_settings()
 
 
 
+# conf = ConnectionConfig(
+#     MAIL_USERNAME=os.environ.get("MAIL_USERNAME", ""),
+#     MAIL_PASSWORD=os.environ.get("MAIL_PASSWORD", ""),
+#     # MAIL_PORT=os.environ.get("MAIL_PORT", 587),
+#     MAIL_PORT=os.environ.get("MAIL_PORT", 587),
+#     MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp"),
+#     # MAIL_STARTTLS=os.environ.get("MAIL_STARTTLS", True),#was false
+#     # MAIL_SSL_TLS=os.environ.get("MAIL_SSL_TLS", True), #was false
+#     MAIL_STARTTLS=os.environ.get("MAIL_STARTTLS", "true").lower() in ("true", "yes", "1"),  # Adjusted to handle boolean from string
+#     MAIL_SSL_TLS=os.environ.get("MAIL_SSL_TLS", "false").lower() in ("true", "yes", "1"),  # Adjusted to handle boolean from string
+#     MAIL_DEBUG=True,
+#     MAIL_FROM=os.environ.get("MAIL_FROM", 'noreply@test.com'),
+#     MAIL_FROM_NAME=os.environ.get("MAIL_FROM_NAME", settings.APP_NAME),
+#     TEMPLATE_FOLDER=Path(__file__).parent.parent / "Template",
+#     USE_CREDENTIALS=os.environ.get("USE_CREDENTIALS", "true").lower() in ("true", "yes", "1"),  # Adjusted to handle boolean from string
+#     # USE_CREDENTIALS=os.environ.get("USE_CREDENTIALS", True)
+# )
+
 conf = ConnectionConfig(
     MAIL_USERNAME=os.environ.get("MAIL_USERNAME", ""),
     MAIL_PASSWORD=os.environ.get("MAIL_PASSWORD", ""),
-    MAIL_PORT=os.environ.get("MAIL_PORT", 587),
-    MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp"),
-    # MAIL_STARTTLS=os.environ.get("MAIL_STARTTLS", True),#was false
-    # MAIL_SSL_TLS=os.environ.get("MAIL_SSL_TLS", True), #was false
-    MAIL_STARTTLS=os.environ.get("MAIL_STARTTLS", "true").lower() in ("true", "yes", "1"),  # Adjusted to handle boolean from string
-    MAIL_SSL_TLS=os.environ.get("MAIL_SSL_TLS", "false").lower() in ("true", "yes", "1"),  # Adjusted to handle boolean from string
+    MAIL_PORT=os.environ.get("MAIL_PORT", 465),
+    MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp.gmail.com"),
+    MAIL_STARTTLS=os.environ.get("MAIL_STARTTLS", "false").lower() in ("true", "yes", "1"),  # Set to False
+    MAIL_SSL_TLS=os.environ.get("MAIL_SSL_TLS", "true").lower() in ("true", "yes", "1"),  # Set to True
     MAIL_DEBUG=True,
     MAIL_FROM=os.environ.get("MAIL_FROM", 'noreply@test.com'),
     MAIL_FROM_NAME=os.environ.get("MAIL_FROM_NAME", settings.APP_NAME),
     TEMPLATE_FOLDER=Path(__file__).parent.parent / "Template",
-    USE_CREDENTIALS=os.environ.get("USE_CREDENTIALS", "true").lower() in ("true", "yes", "1"),  # Adjusted to handle boolean from string
-    # USE_CREDENTIALS=os.environ.get("USE_CREDENTIALS", True)
+    USE_CREDENTIALS=os.environ.get("MAIL_USE_CREDENTIALS", "true").lower() in ("true", "yes", "1"),
 )
-
 
 
 # # Initializes a FastMail instance and will handle sending emails based on the settings stored in conf:
