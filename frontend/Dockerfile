@@ -5,13 +5,15 @@ FROM node:20.11.1
 WORKDIR /app
 
 # 3) Copy package.json and package-lock.json (if available) to the working directory:
-COPY ./frontend/package*.json ./
+# COPY ./frontend/package*.json ./
+COPY package*.json ./
 
 # 4) Install all dependencies listed in package.json:
 RUN npm install
 
 # 5) Copy the rest of your application code to the working directory:
-COPY ./frontend ./
+# COPY ./frontend ./
+COPY . .
 
 # 6) Instruct Docker that the Frontend container will listen on port 3000:
 EXPOSE 3000
