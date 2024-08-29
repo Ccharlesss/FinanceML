@@ -224,7 +224,7 @@ async def get_login_token(data, session):
         email=user.email,
         is_active=user.is_active,
         is_authenticated=user.is_authenticated,
-        roles=user.role  # Assuming 'roles' is a field in your User model that contains a list of roles
+        roles=user.role
     )
 
 

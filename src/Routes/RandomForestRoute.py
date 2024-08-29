@@ -25,7 +25,5 @@ async def get_prediction(ticker: str, session: Session = Depends(get_db), curren
     raise HTTPException(status_code=401, detail="Not authorized.")
   if not current_user.role == "Admin":
     raise HTTPException(status_code=401, detail="Not an admin thus not authorized.")
-  # return await RandomForesstService.orchestrate_random_forest(ticker)
-  # return JSONResponse({"message": "Random forest was performed successfully."})
   prediction = await RandomForesstService.orchestrate_random_forest(ticker)
   return JSONResponse({"result": prediction})

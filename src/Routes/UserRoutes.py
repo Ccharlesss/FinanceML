@@ -54,7 +54,7 @@ async def block_user_account(data: FreezeAccountFields, session:Session = Depend
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authorized")
     if not current_user.role == "Admin":
-        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized.")
     user = await UserController.freeze_user_account(data.user_id, session)
     return user
 
@@ -64,7 +64,7 @@ async def unblock_user_account(data: FreezeAccountFields, session:Session = Depe
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authorized")
     if not current_user.role == "Admin":
-        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized.")
     user = await UserController.unfreeze_user_account(data.user_id, session)
     return user
 
@@ -75,6 +75,6 @@ async def update_user(data: UpdateUserDetailsField, session:Session = Depends(ge
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authorized")
     if not current_user.role == "Admin":
-        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized")
+        raise HTTPException(status_code=401, detail="Not an Admin thus not authorized.")
     return await UserController.update_user_details(data.user_id, data.new_username, data.new_user_role, session)
 
