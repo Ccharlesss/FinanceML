@@ -77,3 +77,17 @@
   justify-content: center;
   align-items: center;
 }
+
+/* Ensure the prediction-controls container uses flexbox */
+.prediction-controls {
+  display: flex;
+  align-items: center; /* Align items vertically centered */
+  gap: 10px; /* Adjust the space between items as needed */
+}
+
+/* Ensure the prediction result container is aligned correctly */
+.prediction-result {
+  display: flex;
+  align-items: center; /* Align the arrow vertically centered */
+  margin-left: 10px; /* Space between the button and the result arrow */
+}

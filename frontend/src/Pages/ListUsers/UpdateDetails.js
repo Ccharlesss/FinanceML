@@ -116,7 +116,7 @@ export default function FormDialog({
           value={editingUser.user_name || ""}
           onChange={handleChange}
         />
-        <TextField
+        {/* <TextField
           required
           margin="dense"
           name="user_email"
@@ -125,8 +125,9 @@ export default function FormDialog({
           fullWidth
           variant="standard"
           value={editingUser.user_email || ""}
+          
           onChange={handleChange}
-        />
+        /> */}
         <TextField
           required
           margin="dense"

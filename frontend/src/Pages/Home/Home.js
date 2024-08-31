@@ -17,6 +17,10 @@ import { GoArrowUpRight } from "react-icons/go";
 import { FiArrowDownRight } from "react-icons/fi";
 import "./Home.css"; // Import the CSS file
 
+// Import the spinner
+import { quantum } from "ldrs";
+quantum.register();
+
 const stockTickers = [
   "MSFT",
   "AAPL",
@@ -517,6 +521,211 @@ const stockTickers = [
   "BIO",
 ];
 
+// const Home = () => {
+//   const [isPressed, setIsPressed] = useState(false);
+//   const [fetchedData, setFetchedData] = useState({
+//     cluster0: [],
+//     cluster1: [],
+//     cluster2: [],
+//     cluster3: [],
+//   });
+//   const [selectedTicker, setSelectedTicker] = useState(stockTickers[0]);
+//   const [predictionResult, setPredictionResult] = useState(null);
+
+//   const organizeDataAccordingToClusters = (data) => {
+//     const clusters = {
+//       cluster0: [],
+//       cluster1: [],
+//       cluster2: [],
+//       cluster3: [],
+//     };
+
+//     Object.entries(data).forEach(([key, value]) => {
+//       if (value.Cluster === 0) {
+//         clusters.cluster0.push(value);
+//       } else if (value.Cluster === 1) {
+//         clusters.cluster1.push(value);
+//       } else if (value.Cluster === 2) {
+//         clusters.cluster2.push(value);
+//       } else if (value.Cluster === 3) {
+//         clusters.cluster3.push(value);
+//       }
+//     });
+
+//     return clusters;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     try {
+//       const response = await axios.get(
+//         `${API_BASE_URL}/visualze/kmean-cluster`
+//       );
+//       if (response.status === 200) {
+//         console.log("success", response.data);
+//         setIsPressed(true);
+//         const organizedData = organizeDataAccordingToClusters(
+//           JSON.parse(response.data)
+//         );
+//         setFetchedData(organizedData);
+//       }
+//     } catch (error) {
+//       console.log(
+//         "An error occurred while fetching the data:",
+//         error.response ? error.response.data : error.message
+//       );
+//     }
+//   };
+
+//   const handlePrediction = async () => {
+//     try {
+//       const response = await axios.get(
+//         `${API_BASE_URL}/predict_next_closing_trend/predict_closing_price_trend?ticker=${selectedTicker}`
+//       );
+//       if (response.status === 200) {
+//         const result = response.data.result; // Assuming the result is returned in this format
+//         console.log(result);
+//         console.log("The result of the prediction is:", result);
+//         setPredictionResult(result);
+//       }
+//     } catch (error) {
+//       console.log(
+//         "An error occurred while fetching the prediction:",
+//         error.response ? error.response.data : error.message
+//       );
+//     }
+//   };
+
+//   const handleTickerChange = (e) => {
+//     setSelectedTicker(e.target.value);
+//     setPredictionResult(null); // Reset prediction result when ticker changes
+//   };
+
+//   const CustomTooltip = ({ active, payload }) => {
+//     if (active && payload && payload.length) {
+//       const data = payload[0].payload;
+//       return (
+//         <div className="custom-tooltip">
+//           <p className="label">{`Ticker: ${data.Ticker}`}</p>
+//           <p className="intro">{`Average Annual Return: ${data["Avr Annual Return"]}`}</p>
+//           <p className="intro">{`Average Annual Volatility: ${data["Avr Annual Volatility"]}`}</p>
+//         </div>
+//       );
+//     }
+
+//     return null;
+//   };
+
+//   return (
+//     <div className="home-container">
+//       <Navbar />
+
+//       <div
+//         className={`button-container ${isPressed ? "expanded" : "collapsed"}`}
+//       >
+//         <h2>Clusterize stocks</h2>
+//         <CustomButton className="custom-button" onClick={handleSubmit}>
+//           Show Clussters
+//         </CustomButton>
+//         {isPressed && (
+//           <div className="graph-container">
+//             <ResponsiveContainer width="100%" height={400}>
+//               <ScatterChart>
+//                 <CartesianGrid />
+//                 <XAxis
+//                   type="number"
+//                   dataKey="Avr Annual Return"
+//                   name="Average Annual Return"
+//                   label={{
+//                     value: "Average Annual Return",
+//                     position: "outsideBottomMiddle",
+//                     dx: 10,
+//                     dy: 10,
+//                   }}
+//                 />
+//                 <YAxis
+//                   type="number"
+//                   dataKey="Avr Annual Volatility"
+//                   name="Average Annual Volatility"
+//                   label={{
+//                     value: "Average Annual Volatility",
+//                     angle: -90,
+//                     position: "outsideMiddle",
+//                     dx: -10,
+//                     dy: -10,
+//                   }}
+//                 />
+//                 <Tooltip
+//                   content={<CustomTooltip />}
+//                   cursor={{ strokeDasharray: "3 3" }}
+//                 />
+//                 <Legend />
+//                 <Scatter
+//                   name="Cluster 0"
+//                   data={fetchedData.cluster0}
+//                   fill="#8884d8"
+//                 />
+//                 <Scatter
+//                   name="Cluster 1"
+//                   data={fetchedData.cluster1}
+//                   fill="#82ca9d"
+//                 />
+//                 <Scatter
+//                   name="Cluster 2"
+//                   data={fetchedData.cluster2}
+//                   fill="#ffc658"
+//                 />
+//                 <Scatter
+//                   name="Cluster 3"
+//                   data={fetchedData.cluster3}
+//                   fill="#ff8042"
+//                 />
+//               </ScatterChart>
+//             </ResponsiveContainer>
+//           </div>
+//         )}
+//       </div>
+//       {/* New Box for Stock Prediction */}
+//       <div className="prediction-container">
+//         <h3>Stock Price Prediction</h3>
+//         <div className="prediction-controls">
+//           <select
+//             value={selectedTicker}
+//             onChange={handleTickerChange} // Update the handler here
+//           >
+//             {stockTickers.map((ticker) => (
+//               <option key={ticker} value={ticker}>
+//                 {ticker}
+//               </option>
+//             ))}
+//           </select>
+//           <CustomButton className="custom-button" onClick={handlePrediction}>
+//             Predict Closing Price Trend
+//           </CustomButton>
+//           {predictionResult !== null && (
+//             <div className="prediction-result">
+//               {predictionResult === 1 ? (
+//                 <>
+//                   {console.log("Prediction is 1 - should show green arrow")}
+//                   <GoArrowUpRight size={30} color="green" />
+//                 </>
+//               ) : (
+//                 <>
+//                   {console.log("Prediction is not 1 - should show red arrow")}
+//                   <FiArrowDownRight size={30} color="red" />
+//                 </>
+//               )}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+///////////////==========
+
 const Home = () => {
   const [isPressed, setIsPressed] = useState(false);
   const [fetchedData, setFetchedData] = useState({
@@ -527,6 +736,8 @@ const Home = () => {
   });
   const [selectedTicker, setSelectedTicker] = useState(stockTickers[0]);
   const [predictionResult, setPredictionResult] = useState(null);
+  const [loadingClusters, setLoadingClusters] = useState(false); // Loading state for clusters
+  const [loadingPrediction, setLoadingPrediction] = useState(false); // Loading state for prediction
 
   const organizeDataAccordingToClusters = (data) => {
     const clusters = {
@@ -551,7 +762,8 @@ const Home = () => {
     return clusters;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
+    setLoadingClusters(true); // Start loading for clusters
     try {
       const response = await axios.get(
         `${API_BASE_URL}/visualze/kmean-cluster`
@@ -569,10 +781,13 @@ const Home = () => {
         "An error occurred while fetching the data:",
         error.response ? error.response.data : error.message
       );
+    } finally {
+      setLoadingClusters(false); // Stop loading for clusters
     }
   };
 
   const handlePrediction = async () => {
+    setLoadingPrediction(true); // Start loading for prediction
     try {
       const response = await axios.get(
         `${API_BASE_URL}/predict_next_closing_trend/predict_closing_price_trend?ticker=${selectedTicker}`
@@ -588,6 +803,8 @@ const Home = () => {
         "An error occurred while fetching the prediction:",
         error.response ? error.response.data : error.message
       );
+    } finally {
+      setLoadingPrediction(false); // Stop loading for prediction
     }
   };
 
@@ -613,21 +830,24 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <Navbar /> {/* Add the Navbar here */}
+      <Navbar />
+
       <div
         className={`button-container ${isPressed ? "expanded" : "collapsed"}`}
       >
-        <p>
-          The K-Means algorithm is an iterative algorithm that divides a group
-          of n data points into k non-overlapping subgroups (clusters) based on
-          their inherent similarities. The algorithm minimizes the variance
-          within each cluster to ensure that the data points within a cluster
-          are as close as possible to the centroid of that cluster.
-        </p>
-        <CustomButton className="custom-button" onClick={handleSubmit}>
-          Show Clusters
+        <h2>Clusterize stocks</h2>
+        <CustomButton
+          className="custom-button"
+          onClick={handleSubmit}
+          disabled={loadingClusters}
+        >
+          {loadingClusters ? (
+            <l-quantum size="25" speed="1.75" color="green"></l-quantum>
+          ) : (
+            "Show Clusters"
+          )}
         </CustomButton>
-        {isPressed && (
+        {isPressed && !loadingClusters && (
           <div className="graph-container">
             <ResponsiveContainer width="100%" height={400}>
               <ScatterChart>
@@ -661,22 +881,22 @@ const Home = () => {
                 />
                 <Legend />
                 <Scatter
-                  name="Cluster 0"
+                  name="Mid return/Low volatility"
                   data={fetchedData.cluster0}
                   fill="#8884d8"
                 />
                 <Scatter
-                  name="Cluster 1"
+                  name="High return/High volatilty"
                   data={fetchedData.cluster1}
                   fill="#82ca9d"
                 />
                 <Scatter
-                  name="Cluster 2"
+                  name="Low return/Low volatility"
                   data={fetchedData.cluster2}
                   fill="#ffc658"
                 />
                 <Scatter
-                  name="Cluster 3"
+                  name="Mid return/High volatility"
                   data={fetchedData.cluster3}
                   fill="#ff8042"
                 />
@@ -688,37 +908,151 @@ const Home = () => {
       {/* New Box for Stock Prediction */}
       <div className="prediction-container">
         <h3>Stock Price Prediction</h3>
-        <select
-          value={selectedTicker}
-          onChange={handleTickerChange} // Update the handler here
-        >
-          {stockTickers.map((ticker) => (
-            <option key={ticker} value={ticker}>
-              {ticker}
-            </option>
-          ))}
-        </select>
-        <CustomButton className="custom-button" onClick={handlePrediction}>
-          Predict Closing Price Trend
-        </CustomButton>
-        {predictionResult !== null && (
-          <div className="prediction-result">
-            {predictionResult === 1 ? (
-              <>
-                {console.log("Prediction is 1 - should show green arrow")}
-                <GoArrowUpRight size={30} color="green" />
-              </>
+        <div className="prediction-controls">
+          <select value={selectedTicker} onChange={handleTickerChange}>
+            {stockTickers.map((ticker) => (
+              <option key={ticker} value={ticker}>
+                {ticker}
+              </option>
+            ))}
+          </select>
+          <CustomButton
+            className="custom-button"
+            onClick={handlePrediction}
+            disabled={loadingPrediction}
+          >
+            {loadingPrediction ? (
+              <l-quantum size="25" speed="1.75" color="black"></l-quantum>
             ) : (
-              <>
-                {console.log("Prediction is not 1 - should show red arrow")}
-                <FiArrowDownRight size={30} color="red" />
-              </>
+              "Predict Closing Price Trend"
             )}
-          </div>
-        )}
+          </CustomButton>
+          {predictionResult !== null && (
+            <div className="prediction-result">
+              {predictionResult === 1 ? (
+                <>
+                  <GoArrowUpRight size={30} color="green" />
+                </>
+              ) : (
+                <>
+                  <FiArrowDownRight size={30} color="red" />
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Home;
+
+/////////////////
+
+//   return (
+//     <div className="home-container">
+//       <Navbar /> {/* Add the Navbar here */}
+//       <div
+//         className={`button-container ${isPressed ? "expanded" : "collapsed"}`}
+//       >
+//         {" "}
+//         <h2>Clusterize stocks</h2>
+//         <CustomButton className="custom-button" onClick={handleSubmit}>
+//           Show Clussters
+//         </CustomButton>
+//         {isPressed && (
+//           <div className="graph-container">
+//             <ResponsiveContainer width="100%" height={400}>
+//               <ScatterChart>
+//                 <CartesianGrid />
+//                 <XAxis
+//                   type="number"
+//                   dataKey="Avr Annual Return"
+//                   name="Average Annual Return"
+//                   label={{
+//                     value: "Average Annual Return",
+//                     position: "outsideBottomMiddle",
+//                     dx: 10,
+//                     dy: 10,
+//                   }}
+//                 />
+//                 <YAxis
+//                   type="number"
+//                   dataKey="Avr Annual Volatility"
+//                   name="Average Annual Volatility"
+//                   label={{
+//                     value: "Average Annual Volatility",
+//                     angle: -90,
+//                     position: "outsideMiddle",
+//                     dx: -10,
+//                     dy: -10,
+//                   }}
+//                 />
+//                 <Tooltip
+//                   content={<CustomTooltip />}
+//                   cursor={{ strokeDasharray: "3 3" }}
+//                 />
+//                 <Legend />
+//                 <Scatter
+//                   name="Cluster 0"
+//                   data={fetchedData.cluster0}
+//                   fill="#8884d8"
+//                 />
+//                 <Scatter
+//                   name="Cluster 1"
+//                   data={fetchedData.cluster1}
+//                   fill="#82ca9d"
+//                 />
+//                 <Scatter
+//                   name="Cluster 2"
+//                   data={fetchedData.cluster2}
+//                   fill="#ffc658"
+//                 />
+//                 <Scatter
+//                   name="Cluster 3"
+//                   data={fetchedData.cluster3}
+//                   fill="#ff8042"
+//                 />
+//               </ScatterChart>
+//             </ResponsiveContainer>
+//           </div>
+//         )}
+//       </div>
+//       {/* New Box for Stock Prediction */}
+//       <div className="prediction-container">
+//         <h3>Stock Price Prediction</h3>
+//         <select
+//           value={selectedTicker}
+//           onChange={handleTickerChange} // Update the handler here
+//         >
+//           {stockTickers.map((ticker) => (
+//             <option key={ticker} value={ticker}>
+//               {ticker}
+//             </option>
+//           ))}
+//         </select>
+//         <CustomButton className="custom-button" onClick={handlePrediction}>
+//           Predict Closing Price Trend
+//         </CustomButton>
+//         {predictionResult !== null && (
+//           <div className="prediction-result">
+//             {predictionResult === 1 ? (
+//               <>
+//                 {console.log("Prediction is 1 - should show green arrow")}
+//                 <GoArrowUpRight size={30} color="green" />
+//               </>
+//             ) : (
+//               <>
+//                 {console.log("Prediction is not 1 - should show red arrow")}
+//                 <FiArrowDownRight size={30} color="red" />
+//               </>
+//             )}
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Home;

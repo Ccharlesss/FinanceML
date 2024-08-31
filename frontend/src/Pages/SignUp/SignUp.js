@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { API_BASE_URL } from "../../apiConfig.js";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 // Inports for CSS styling:
 import "./SignUp.css";
@@ -36,15 +37,25 @@ const SignUp = () => {
         password: formData.password,
       };
       const response = await axios.post(
-        API_BASE_URL + "users/signup",
+        API_BASE_URL + "/users/signup",
         postData
       );
 
       if (response.status === 200) {
         console.log("Account was successfully created:", response.data);
+        Swal.fire({
+          title: "Your account was successfully created!",
+          text: "An verification link was send to your email, please verify your account before login in.",
+          icon: "success",
+        });
         setDataSubmitted(true);
       }
     } catch (error) {
+      Swal.fire({
+        title: "Failed to create a user account!",
+        text: "Please ensure your username and email are valid and that your password is strong enough. The Password must be greater than 8 character in length, must contain a digit, at lease one upper and lower case character and a special character. ",
+        icon: "error",
+      });
       console.log(
         "An error occurred in the account creation",
         error.response ? error.response.data : error.message
