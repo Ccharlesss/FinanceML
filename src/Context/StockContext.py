@@ -39,9 +39,10 @@ SP500 = ['MSFT', 'AAPL', 'NVDA', 'AMZN', 'META', 'GOOGL', 'GOOG', 'LLY', 'JPM', 
 
 # SP500 = ['MSFT', 'AAPL', 'NVDA']
 
-
+# CSV_FILE_PATH = "src/StockData/test_data.csv"
 CSV_FILE_PATH = "src/StockData/historical_data.csv"
 # CSV_FILE_PATH = "src/StockData/blabla-data.csv" # For testing
 
+# DATE_FILE_PATH = "src/StockData/record.txt"
 DATE_FILE_PATH = "src/StockData/date_when_updated.txt"
 # DATE_FILE_PATH = "src/StockData/date_when_updated_test.txt" # For testing

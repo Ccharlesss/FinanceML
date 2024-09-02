@@ -809,6 +809,7 @@ const Home = () => {
   };
 
   const handleTickerChange = (e) => {
+    console.log("Selected ticker:", e.target.value);
     setSelectedTicker(e.target.value);
     setPredictionResult(null); // Reset prediction result when ticker changes
   };
@@ -828,10 +829,132 @@ const Home = () => {
     return null;
   };
 
+  //   return (
+  //     <div className="home-container">
+  //       <Navbar />
+  //       <div
+  //         className={`button-container ${isPressed ? "expanded" : "collapsed"}`}
+  //       >
+  //         <h2>Clusterize stocks</h2>
+  //         <CustomButton
+  //           className="custom-button"
+  //           onClick={handleSubmit}
+  //           disabled={loadingClusters}
+  //         >
+  //           {loadingClusters ? (
+  //             <l-quantum size="25" speed="1.75" color="green"></l-quantum>
+  //           ) : (
+  //             "Show Clusters"
+  //           )}
+  //         </CustomButton>
+  //         {isPressed && !loadingClusters && (
+  //           <div className="graph-container">
+  //             <ResponsiveContainer width="100%" height={400}>
+  //               <ScatterChart>
+  //                 <CartesianGrid />
+  //                 <XAxis
+  //                   type="number"
+  //                   dataKey="Avr Annual Return"
+  //                   name="Average Annual Return"
+  //                   label={{
+  //                     value: "Average Annual Return",
+  //                     position: "outsideBottomMiddle",
+  //                     dx: 10,
+  //                     dy: 10,
+  //                   }}
+  //                 />
+  //                 <YAxis
+  //                   type="number"
+  //                   dataKey="Avr Annual Volatility"
+  //                   name="Average Annual Volatility"
+  //                   label={{
+  //                     value: "Average Annual Volatility",
+  //                     angle: -90,
+  //                     position: "outsideMiddle",
+  //                     dx: -10,
+  //                     dy: -10,
+  //                   }}
+  //                 />
+  //                 <Tooltip
+  //                   content={<CustomTooltip />}
+  //                   cursor={{ strokeDasharray: "3 3" }}
+  //                 />
+  //                 <Legend />
+  //                 <Scatter
+  //                   name="Mid return/Low volatility"
+  //                   data={fetchedData.cluster0}
+  //                   fill="#8884d8"
+  //                 />
+  //                 <Scatter
+  //                   name="High return/High volatilty"
+  //                   data={fetchedData.cluster1}
+  //                   fill="#82ca9d"
+  //                 />
+  //                 <Scatter
+  //                   name="Low return/Low volatility"
+  //                   data={fetchedData.cluster2}
+  //                   fill="#ffc658"
+  //                 />
+  //                 <Scatter
+  //                   name="Mid return/High volatility"
+  //                   data={fetchedData.cluster3}
+  //                   fill="#ff8042"
+  //                 />
+  //               </ScatterChart>
+  //             </ResponsiveContainer>
+  //           </div>
+  //         )}
+  //       </div>
+  //       {/* New Box for Stock Prediction */}
+  //       <div className="prediction-container">
+  //         <h3>Stock Price Prediction</h3>
+  //         <div className="prediction-controls">
+  //           <select value={selectedTicker} onChange={handleTickerChange}>
+  //             {stockTickers.map((ticker) => (
+  //               <option key={ticker} value={ticker}>
+  //                 {ticker}
+  //               </option>
+  //             ))}
+  //           </select>
+  //           <CustomButton
+  //             className="custom-button"
+  //             onClick={handlePrediction}
+  //             disabled={loadingPrediction}
+  //           >
+  //             {loadingPrediction ? (
+  //               <l-quantum size="25" speed="1.75" color="black"></l-quantum>
+  //             ) : (
+  //               "Predict Closing Price Trend"
+  //             )}
+  //           </CustomButton>
+  //           {predictionResult !== null && (
+  //             <div className="prediction-result">
+  //               {predictionResult === 1 ? (
+  //                 <>
+  //                   <GoArrowUpRight size={30} color="green" />
+  //                 </>
+  //               ) : (
+  //                 <>
+  //                   <FiArrowDownRight size={30} color="red" />
+  //                 </>
+  //               )}
+  //             </div>
+  //           )}
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+  // export default Home;
+
   return (
     <div className="home-container">
       <Navbar />
-
+      <div className="home-header">
+        <h1>Liquidity AI</h1>
+        <p className="home-subtitle">Unleash the power of AI</p>
+      </div>
       <div
         className={`button-container ${isPressed ? "expanded" : "collapsed"}`}
       >
@@ -947,112 +1070,3 @@ const Home = () => {
 };
 
 export default Home;
-
-/////////////////
-
-//   return (
-//     <div className="home-container">
-//       <Navbar /> {/* Add the Navbar here */}
-//       <div
-//         className={`button-container ${isPressed ? "expanded" : "collapsed"}`}
-//       >
-//         {" "}
-//         <h2>Clusterize stocks</h2>
-//         <CustomButton className="custom-button" onClick={handleSubmit}>
-//           Show Clussters
-//         </CustomButton>
-//         {isPressed && (
-//           <div className="graph-container">
-//             <ResponsiveContainer width="100%" height={400}>
-//               <ScatterChart>
-//                 <CartesianGrid />
-//                 <XAxis
-//                   type="number"
-//                   dataKey="Avr Annual Return"
-//                   name="Average Annual Return"
-//                   label={{
-//                     value: "Average Annual Return",
-//                     position: "outsideBottomMiddle",
-//                     dx: 10,
-//                     dy: 10,
-//                   }}
-//                 />
-//                 <YAxis
-//                   type="number"
-//                   dataKey="Avr Annual Volatility"
-//                   name="Average Annual Volatility"
-//                   label={{
-//                     value: "Average Annual Volatility",
-//                     angle: -90,
-//                     position: "outsideMiddle",
-//                     dx: -10,
-//                     dy: -10,
-//                   }}
-//                 />
-//                 <Tooltip
-//                   content={<CustomTooltip />}
-//                   cursor={{ strokeDasharray: "3 3" }}
-//                 />
-//                 <Legend />
-//                 <Scatter
-//                   name="Cluster 0"
-//                   data={fetchedData.cluster0}
-//                   fill="#8884d8"
-//                 />
-//                 <Scatter
-//                   name="Cluster 1"
-//                   data={fetchedData.cluster1}
-//                   fill="#82ca9d"
-//                 />
-//                 <Scatter
-//                   name="Cluster 2"
-//                   data={fetchedData.cluster2}
-//                   fill="#ffc658"
-//                 />
-//                 <Scatter
-//                   name="Cluster 3"
-//                   data={fetchedData.cluster3}
-//                   fill="#ff8042"
-//                 />
-//               </ScatterChart>
-//             </ResponsiveContainer>
-//           </div>
-//         )}
-//       </div>
-//       {/* New Box for Stock Prediction */}
-//       <div className="prediction-container">
-//         <h3>Stock Price Prediction</h3>
-//         <select
-//           value={selectedTicker}
-//           onChange={handleTickerChange} // Update the handler here
-//         >
-//           {stockTickers.map((ticker) => (
-//             <option key={ticker} value={ticker}>
-//               {ticker}
-//             </option>
-//           ))}
-//         </select>
-//         <CustomButton className="custom-button" onClick={handlePrediction}>
-//           Predict Closing Price Trend
-//         </CustomButton>
-//         {predictionResult !== null && (
-//           <div className="prediction-result">
-//             {predictionResult === 1 ? (
-//               <>
-//                 {console.log("Prediction is 1 - should show green arrow")}
-//                 <GoArrowUpRight size={30} color="green" />
-//               </>
-//             ) : (
-//               <>
-//                 {console.log("Prediction is not 1 - should show red arrow")}
-//                 <FiArrowDownRight size={30} color="red" />
-//               </>
-//             )}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;

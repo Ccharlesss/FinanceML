@@ -34,6 +34,7 @@ import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword.js";
 import PrivateRoutes from "./Features/PrivateRoutes/PrivateRoutes.js";
 import Home from "./Pages/Home/Home.js";
 import Users from "./Pages/ListUsers/ListUsers.js";
+import VerifyAccount from "./Pages/Verify-account/VerifyAccount.js";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
+          <Route path="/auth/account-verify" element={<VerifyAccount />} />
         </Routes>
       </div>
     </BrowserRouter>

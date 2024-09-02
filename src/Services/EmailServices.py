@@ -21,8 +21,10 @@ async def send_account_verification_email(user: User, background_tasks: Backgrou
     token = hash_password(string_context)
     # 3) Construct the account activation URL using the token and user's email:
     # 3) The token is included in the verification email sent to the user. 
-    # activate_url = f"{settings.FRONTEND_HOST}/auth/account-verify?token={token}&email={user.email}"
-    activate_url = f"{settings.FRONTEND_HOST}/account-verify?token={token}&email={user.email}"
+    activate_url = f"{settings.FRONTEND_HOST}/auth/account-verify?token={token}&email={user.email}"
+    # activate_url = f"{settings.FRONTEND_HOST}/users/verify-account?token={token}&email={user.email}"
+    # activate_url = f"{settings.BACKEND_HOST}/users/verify-account?token={token}&email={user.email}"
+
     # 4) Data that will be sent in the verification email: app_name, username and activation link:
     data = {
         'app_name': settings.APP_NAME,

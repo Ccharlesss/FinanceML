@@ -68,8 +68,72 @@ const ForgetPassword = () => {
     return <Navigate to="/" />;
   }
 
+  //   return (
+  //     <div className="container-form">
+  //       <div className="forgot-password-form">
+  //         <div className="form-content">
+  //           <header>Forgot Password</header>
+  //           <form onSubmit={handleSubmit}>
+  //             {/* Email Input Field */}
+  //             <div className="field input-field">
+  //               <input
+  //                 type="email"
+  //                 placeholder="Email"
+  //                 id="email"
+  //                 name="user_email" // Use a unique name attribute
+  //                 autoComplete="email" // Explicitly set autoComplete
+  //                 onChange={handleChange}
+  //                 value={formData.email}
+  //               />
+  //             </div>
+
+  //             {/* Username Input Field */}
+  //             <div className="field input-field">
+  //               <input
+  //                 type="text"
+  //                 placeholder="Username"
+  //                 id="username"
+  //                 name="user_name" // Use a unique name attribute
+  //                 autoComplete="username" // Explicitly set autoComplete
+  //                 onChange={handleChange}
+  //                 value={formData.username}
+  //               />
+  //             </div>
+
+  //             {/* New Password Input Field */}
+  //             <div className="field input-field">
+  //               <input
+  //                 type="password"
+  //                 placeholder="New Password"
+  //                 id="newPassword"
+  //                 name="new_password" // Use a unique name attribute
+  //                 autoComplete="new-password" // Explicitly set autoComplete
+  //                 onChange={handleChange}
+  //                 value={formData.newPassword}
+  //               />
+  //               <i className="eye-icon">
+  //                 <FaRegEyeSlash />
+  //               </i>
+  //             </div>
+
+  //             <div className="field button-field">
+  //               <button>Reset Password</button>
+  //             </div>
+  //           </form>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+  // export default ForgetPassword;
+
   return (
     <div className="container-form">
+      <div className="title-section">
+        <h1>Liquidity AI</h1>
+        <p>Unleash the power of AI to make insightful investments</p>
+      </div>
       <div className="forgot-password-form">
         <div className="form-content">
           <header>Forgot Password</header>
@@ -80,8 +144,8 @@ const ForgetPassword = () => {
                 type="email"
                 placeholder="Email"
                 id="email"
-                name="user_email" // Use a unique name attribute
-                autoComplete="email" // Explicitly set autoComplete
+                name="user_email"
+                autoComplete="email"
                 onChange={handleChange}
                 value={formData.email}
               />
@@ -93,8 +157,8 @@ const ForgetPassword = () => {
                 type="text"
                 placeholder="Username"
                 id="username"
-                name="user_name" // Use a unique name attribute
-                autoComplete="username" // Explicitly set autoComplete
+                name="user_name"
+                autoComplete="username"
                 onChange={handleChange}
                 value={formData.username}
               />
@@ -106,8 +170,8 @@ const ForgetPassword = () => {
                 type="password"
                 placeholder="New Password"
                 id="newPassword"
-                name="new_password" // Use a unique name attribute
-                autoComplete="new-password" // Explicitly set autoComplete
+                name="new_password"
+                autoComplete="new-password"
                 onChange={handleChange}
                 value={formData.newPassword}
               />

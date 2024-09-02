@@ -1,4 +1,43 @@
-/* Home.css */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f0f0f, #3a3a3a);
+  color: #e0e0e0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(78, 182, 238, 0.3), transparent 70%);
+  z-index: 0;
+}
+
+.home-header {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+}
+
+.home-header h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #e0e0e0;
+}
+
+.home-header .home-subtitle {
+  font-size: 1.5rem;
+  color: #b0b0b0;
+}
+
 .button-container {
   width: 100%;
   max-width: 800px;
@@ -11,7 +50,7 @@
 }
 
 .button-container.expanded {
-  max-height: 1000px; /* Adjust this value based on the height of your graph */
+  max-height: 1000px;
   padding-bottom: 20px;
 }
 
@@ -69,6 +108,7 @@
   border-radius: 8px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .prediction-result {
@@ -78,16 +118,20 @@
   align-items: center;
 }
 
-/* Ensure the prediction-controls container uses flexbox */
 .prediction-controls {
   display: flex;
-  align-items: center; /* Align items vertically centered */
-  gap: 10px; /* Adjust the space between items as needed */
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 }
 
-/* Ensure the prediction result container is aligned correctly */
-.prediction-result {
-  display: flex;
-  align-items: center; /* Align the arrow vertically centered */
-  margin-left: 10px; /* Space between the button and the result arrow */
+.prediction-controls select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+  z-index: 1;
 }

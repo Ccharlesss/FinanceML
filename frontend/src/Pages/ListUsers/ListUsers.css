@@ -1,0 +1,12 @@
+/* ListUsers.css */
+
+.navbar-container {
+  background-color: #333; /* Non-transparent background color */
+  padding: 10px 0; /* Adjust padding as needed */
+}
+
+/* Optional: Style adjustments if needed */
+.navbar-container .navbar {
+  background-color: #333; /* Ensure navbar background color */
+  opacity: 1; /* Ensure full opacity */
+}

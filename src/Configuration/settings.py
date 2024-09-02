@@ -154,6 +154,7 @@ class Settings(BaseSettings):
 
     # Frontend host
     FRONTEND_HOST: str = os.getenv("FRONTEND_HOST", "http://localhost:3000")
+    BACKEND_HOST: str = os.getenv("BACKEND_HOST", "http://localhost:8080")
 
     # JWT Configuration
     JWT_SECRET: str = os.getenv("JWT_SECRET", "649fb93ef34e4fdf4187709c84d643dd61ce730d91856418fdcf563f895ea40f")

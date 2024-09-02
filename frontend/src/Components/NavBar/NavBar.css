@@ -1,10 +1,11 @@
+/* Ensure the navbar is completely transparent */
 .menu--container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #1b2430;
+  background: transparent; /* Set background to transparent */
   padding: 20px 80px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: none; /* Remove the shadow for a transparent look */
 }
 
 .company--logo {
@@ -17,58 +18,54 @@
   justify-content: center;
 }
 
-/* Effect: Remove bullet points from the list  */
+/* Remove bullet points from the list */
 #navbar li {
   list-style: none;
   padding: 0 20px;
   position: relative;
 }
 
-/* Effect: Color text in white & increase font */
-/* Effect: configure transition for hover effect */
+/* Configure nav-link styles */
 #navbar li .nav-link,
 #navbar li button.nav-link {
   text-decoration: none;
   font-size: 1.3rem;
   font-weight: 600;
-  color: white;
+  color: white; /* Adjust color as needed for readability */
   transition: 0.3s ease-in-out;
   background: none; /* Remove background color */
   border: none; /* Remove border */
   cursor: pointer; /* Add cursor pointer */
 }
 
-/* Effect: Configure the hover color */
+/* Configure the hover color */
 #navbar li .nav-link:hover,
 #navbar li button.nav-link:hover {
-  color: rgb(11, 138, 43);
+  color: rgb(11, 138, 43); /* Adjust hover color */
 }
 
-/* Effect: Underline when hover */
+/* Underline on hover */
 #navbar li .nav-link:hover::after,
 #navbar li button.nav-link:hover::after {
   content: "";
   width: 60%;
   height: 2px;
-  background: rgb(11, 138, 43);
+  background: rgb(11, 138, 43); /* Adjust underline color */
   position: absolute;
   bottom: -4px;
   left: 20px;
 }
 
-/* Effect: Display both menu and close logo for mobile devices */
+/* Mobile styles */
 #mobile {
   display: none;
 }
 
-/* Effect: Configure position and color of both logo to center and white */
 #mobile i {
   color: white;
   align-items: center;
 }
 
-/* Effect: Hide all menu options on mobile devices */
-/* Effect all menu option in one column and not in a row */
 @media screen and (max-width: 769px) {
   #navbar {
     display: flex;
@@ -80,13 +77,17 @@
     right: -300px;
     width: 150px;
     height: 40vh;
-    background: #2d353e;
-    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.06);
+    background: rgba(
+      45,
+      53,
+      62,
+      0.9
+    ); /* Semi-transparent background for mobile */
+    box-shadow: none; /* Remove shadow for mobile */
     padding: 40px 0 0 10px;
     transition: 0.3s ease-in-out;
   }
 
-  /* Effect: Display menu option when clicked  */
   #navbar.active {
     right: 0px;
   }
@@ -99,7 +100,6 @@
     display: block;
   }
 
-  /* Effect: Enables both menu and close icons to be clicked  */
   #mobile i {
     font-size: 24px;
     cursor: pointer;

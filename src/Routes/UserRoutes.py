@@ -1,3 +1,4 @@
+import logging
 from typing import List
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -20,6 +21,7 @@ from src.Schemas.FreezeAccountSchemas import FreezeAccountFields
 # Imports from Responses:
 from src.Responses.UserResponse import UserResponse, AccountCreatedResponse
 
+
 user_router = APIRouter(
     prefix='/users',
     tags=['Users'],
@@ -34,6 +36,7 @@ async def create_user_account(data: UserCreate, background_tasks: BackgroundTask
 # Purpose: Sent verification link when an account is created:
 @user_router.post('/verify-account', status_code=status.HTTP_200_OK)
 async def verify_user_account(data: VerifyUserFields, background_tasks: BackgroundTasks, session: Session = Depends(get_db)):
+    logging.info(f"Verification request received: email={data.email}, token={data.token}")
     await UserController.activate_user_account(data, session, background_tasks)
     return JSONResponse({"message": "Account is activated successfully."})
 

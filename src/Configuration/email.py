@@ -19,10 +19,6 @@ from src.Configuration.settings import get_settings
 # Get settings instance from src/Configuration/settings.py:
 settings = get_settings()
 
-# Define the structure for the input data: Email field is a lost of valid email addresses:
-# class EmailSchema(BaseModel):
-#     email: List[EmailStr]
-
 
 
 # conf = ConnectionConfig(

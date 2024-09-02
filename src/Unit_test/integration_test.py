@@ -1,5 +1,6 @@
 # ============================================================================================================
 import json
+import os
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -47,11 +48,16 @@ def engine(postgres_container: PostgresContainer):
     Set up SQLAlchemy engine.
     """
     url = postgres_container.get_connection_url()
+    print(f"Generated DATABASE_URL: {url}") 
     engine = create_engine(url, echo=False, future=True)
     Base.metadata.create_all(bind=engine)
     yield engine
     Base.metadata.drop_all(bind=engine)
     engine.dispose()
+
+
+
+    
 
 @pytest.fixture(scope="session")
 def db_session(engine):
@@ -71,6 +77,8 @@ def test_client(db_session):
     with TestClient(app) as client:
         yield client
     app.dependency_overrides.clear()
+
+
 
 
 mock_data = UserCreate(

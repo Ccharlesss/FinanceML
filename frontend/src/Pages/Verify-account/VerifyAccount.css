@@ -1,0 +1,83 @@
+/* Styles for the Verify Account page */
+
+.verify-account-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #0f0f0f,
+    #3a3a3a
+  ); /* Dark gradient background */
+  color: #e0e0e0; /* Neon grey color */
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Static glowing background effect */
+.verify-account-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(78, 182, 238, 0.3), transparent 70%);
+  z-index: 0;
+}
+
+.verify-account-header {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0; /* Neon grey color */
+  z-index: 1;
+}
+
+.verify-account-subtext {
+  font-size: 1.5rem;
+  color: #b0b0b0; /* Slightly lighter neon grey */
+  margin-bottom: 2rem;
+  z-index: 1;
+}
+
+.verify-account-verification-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  z-index: 1;
+}
+
+.verify-account-verification-header {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #e0e0e0; /* Neon grey color */
+  z-index: 1;
+}
+
+.verify-account-status {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  z-index: 1;
+}
+
+.verify-account-button {
+  padding: 10px 20px;
+  background-color: #00ffcc; /* Neon teal button color */
+  color: #000000; /* Dark text for contrast */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 10px #00ffcc;
+  z-index: 1;
+}
+
+.verify-account-button:hover {
+  background-color: #00e6b3; /* Slightly darker teal on hover */
+  box-shadow: 0 0 15px #00ffcc;
+}

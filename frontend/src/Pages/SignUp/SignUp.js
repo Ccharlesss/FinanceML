@@ -79,11 +79,66 @@ const SignUp = () => {
     return <Navigate to="/sign-in" />;
   }
 
+  //   return (
+  //     <div className="container-form">
+  //       <div className="sign-up-form">
+  //         <div className="form-content">
+  //           <header>SignUp</header>
+  //           <form onSubmit={handleSubmit}>
+  //             <div className="field input-field">
+  //               <input
+  //                 type="email"
+  //                 placeholder="Email"
+  //                 id="email"
+  //                 onChange={handleChange}
+  //                 value={formData.email}
+  //               />
+  //             </div>
+
+  //             <div className="field input-field">
+  //               <input
+  //                 type="text"
+  //                 placeholder="Username"
+  //                 id="username"
+  //                 onChange={handleChange}
+  //                 value={formData.username}
+  //               />
+  //             </div>
+
+  //             <div className="field input-field">
+  //               <input
+  //                 type="password"
+  //                 placeholder="Password"
+  //                 id="password"
+  //                 onChange={handleChange}
+  //                 value={formData.password}
+  //               />
+  //               <i className="eye-icon">
+  //                 <FaRegEyeSlash />
+  //               </i>
+  //             </div>
+
+  //             <div className="field button-field">
+  //               <button>Sign Up</button>
+  //             </div>
+  //           </form>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+  // export default SignUp;
+
   return (
     <div className="container-form">
+      <div className="title-section">
+        <h1>Liquidity AI</h1>
+        <p>Unleash the power of AI to make insightful investments</p>
+      </div>
       <div className="sign-up-form">
         <div className="form-content">
-          <header>SignUp</header>
+          <header>Sign Up</header>
           <form onSubmit={handleSubmit}>
             <div className="field input-field">
               <input
@@ -94,7 +149,6 @@ const SignUp = () => {
                 value={formData.email}
               />
             </div>
-
             <div className="field input-field">
               <input
                 type="text"
@@ -104,7 +158,6 @@ const SignUp = () => {
                 value={formData.username}
               />
             </div>
-
             <div className="field input-field">
               <input
                 type="password"
@@ -117,7 +170,6 @@ const SignUp = () => {
                 <FaRegEyeSlash />
               </i>
             </div>
-
             <div className="field button-field">
               <button>Sign Up</button>
             </div>

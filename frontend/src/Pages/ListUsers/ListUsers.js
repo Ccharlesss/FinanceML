@@ -156,6 +156,7 @@ import FormDialog from "./UpdateDetails";
 import axios from "axios";
 import CustomButton from "../../Components/Button/CustomButton"; // Import CustomButton
 import Swal from "sweetalert2";
+import "./ListUsers.css";
 
 const Users = () => {
   const [open, setOpen] = useState(false);
@@ -333,9 +334,37 @@ const Users = () => {
     }
   };
 
+  //   return (
+  //     <>
+  //       <Navbar />
+  //       <UserTable
+  //         users={users}
+  //         freezeUser={freezeUser}
+  //         unfreezeUser={unfreezeUser}
+  //         editUser={handleEdit}
+  //       />
+  //       <div className="button-container">
+  //         <CustomButton onClick={handleFetchData}>Fetch Data</CustomButton>
+  //         <CustomButton onClick={handleUpdateData}>Update Data</CustomButton>
+  //       </div>
+  //       <FormDialog
+  //         open={open}
+  //         handleClose={handleClose}
+  //         editingUser={editingUser}
+  //         handleChange={(e) =>
+  //           setEditingUser({ ...editingUser, [e.target.name]: e.target.value })
+  //         }
+  //         handleFormSubmit={handleFormSubmit}
+  //       />
+  //     </>
+  //   );
+  // };
+
   return (
     <>
-      <Navbar />
+      <div className="navbar-container">
+        <Navbar />
+      </div>
       <UserTable
         users={users}
         freezeUser={freezeUser}
